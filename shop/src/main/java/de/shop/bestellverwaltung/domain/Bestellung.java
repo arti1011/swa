@@ -1,5 +1,5 @@
 package de.shop.bestellverwaltung.domain;
-
+//deine mudda
 import java.io.Serializable;
 import java.net.URI;
 
