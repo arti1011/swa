@@ -1,5 +1,5 @@
 package de.shop.bestellverwaltung.domain;
-
+//test
 import java.io.Serializable;
 import java.net.URI;
 
