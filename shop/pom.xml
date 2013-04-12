@@ -50,8 +50,8 @@
 	</prerequisites>
 	
 	<scm>
-		<developerConnection>scm:git:http://www.iwi.hs-karlsruhe.de/git/swe00.git</developerConnection>
-		<url>http://www.iwi.hs-karlsruhe.de/git/swe00.git</url>
+		<developerConnection>scm:git:http://www.iwi.hs-karlsruhe.de/git/arti1011.git</developerConnection>
+		<url>http://www.iwi.hs-karlsruhe.de/git/arti1011.git</url>
 	</scm>
 	
 	<licenses>
@@ -68,14 +68,82 @@
 	
 	<developers>
 		<developer>
-			<id>Juergen.Zimmermann</id>
-			<name>J&#252;rgen Zimmermann</name>
-			<email>Juergen.Zimmermann@HS-Karlsruhe.de</email>
+			<id>dwle1011</id>
+			<name>Leon Dworschak</name>
+			<email>dlw1011@HS-Karlsruhe.de</email>
 			<url>http://www.iwi.hs-karlsruhe.de</url>
 			<organization>Hochschule Karlsruhe</organization>
 			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
 			<roles>
-				<role>Dozent</role>
+				<role>Student</role>
+			</roles>
+			<timezone>+1</timezone>     <!-- relativ zu GMT -->
+			<properties>
+				<!--
+				<picUrl>http://my.host.com/my/pic.gif</picUrl>
+				-->
+			</properties>
+		</developer>
+		<developer>
+			<id>egja1011</id>
+			<name>Jan Egger</name>
+			<email>egja1011@HS-Karlsruhe.de</email>
+			<url>http://www.iwi.hs-karlsruhe.de</url>
+			<organization>Hochschule Karlsruhe</organization>
+			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
+			<roles>
+				<role>Student</role>
+			</roles>
+			<timezone>+1</timezone>     <!-- relativ zu GMT -->
+			<properties>
+				<!--
+				<picUrl>http://my.host.com/my/pic.gif</picUrl>
+				-->
+			</properties>
+		</developer>
+		<developer>
+			<id>arti1011</id>
+			<name>Till Arzner</name>
+			<email>arti1011@HS-Karlsruhe.de</email>
+			<url>http://www.iwi.hs-karlsruhe.de</url>
+			<organization>Hochschule Karlsruhe</organization>
+			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
+			<roles>
+				<role>Student</role>
+			</roles>
+			<timezone>+1</timezone>     <!-- relativ zu GMT -->
+			<properties>
+				<!--
+				<picUrl>http://my.host.com/my/pic.gif</picUrl>
+				-->
+			</properties>
+		</developer>
+		<developer>
+			<id>ride1011</id>
+			<name>Dennis Richter</name>
+			<email>ride1011@hs-karlsruhe.de</email>
+			<url>http://www.iwi.hs-karlsruhe.de</url>
+			<organization>Hochschule Karlsruhe</organization>
+			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
+			<roles>
+				<role>Student</role>
+			</roles>
+			<timezone>+1</timezone>     <!-- relativ zu GMT -->
+			<properties>
+				<!--
+				<picUrl>http://my.host.com/my/pic.gif</picUrl>
+				-->
+			</properties>
+		</developer>
+		<developer>
+			<id>gupa1012</id>
+			<name>Patrick G&#252;nther-Schmidt</name>
+			<email>gupa1012@HS-Karlsruhe.de</email>
+			<url>http://www.iwi.hs-karlsruhe.de</url>
+			<organization>Hochschule Karlsruhe</organization>
+			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
+			<roles>
+				<role>Student</role>
 			</roles>
 			<timezone>+1</timezone>     <!-- relativ zu GMT -->
 			<properties>
