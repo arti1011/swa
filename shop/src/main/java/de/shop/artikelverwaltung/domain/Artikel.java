@@ -1,60 +1,73 @@
 package de.shop.artikelverwaltung.domain;
 
-public class Artikel {
-
-}
-//aus Bestellung -> muss angepasst werden
-/*
-package de.shop.bestellverwaltung.domain;
-
 import java.io.Serializable;
-import java.net.URI;
+// TODO überprüfen ob nötig
+//import java.net.URI;
+import java.util.Set;
+// TODO überprüfen ob nötig
+//import org.codehaus.jackson.annotate.JsonIgnore;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 
-import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.domain.HobbyType;
 
-public class Bestellung implements Serializable {
-	private static final long serialVersionUID = 1618359234119003714L;
+public class Artikel implements Serializable  {
+	private static final long serialVersionUID = 161835922343423714L;
 	
 	private Long id;
-	private boolean ausgeliefert;
-	@JsonIgnore
-	private AbstractKunde kunde;
-	private URI kundeUri;
+	private String artikelbezeichnung;
+	private Double preis;
+	private Set<ArtikelFarbeType> farbe;
+	private String verfügbarkeit;
 	
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public boolean isAusgeliefert() {
-		return ausgeliefert;
+
+	public String getArtikelbezeichnung() {
+		return artikelbezeichnung;
 	}
-	public void setAusgeliefert(boolean ausgeliefert) {
-		this.ausgeliefert = ausgeliefert;
+
+	public void setArtikelbezeichnung(String artikelbezeichnung) {
+		this.artikelbezeichnung = artikelbezeichnung;
 	}
-	public AbstractKunde getKunde() {
-		return kunde;
+
+	public Double getPreis() {
+		return preis;
 	}
-	public void setKunde(AbstractKunde kunde) {
-		this.kunde = kunde;
+
+	public void setPreis(Double preis) {
+		this.preis = preis;
 	}
-	
-	public URI getKundeUri() {
-		return kundeUri;
+
+	public Set<ArtikelFarbeType> getFarbe() {
+		return farbe;
 	}
-	public void setKundeUri(URI kundeUri) {
-		this.kundeUri = kundeUri;
+
+	public void setFarbe(Set<ArtikelFarbeType> farbe) {
+		this.farbe = farbe;
 	}
+
+	public String getVerfügbarkeit() {
+		return verfügbarkeit;
+	}
+
+	public void setVerfügbarkeit(String verfügbarkeit) {
+		this.verfügbarkeit = verfügbarkeit;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -63,19 +76,20 @@ public class Bestellung implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Bestellung other = (Bestellung) obj;
+		Artikel other = (Artikel) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		}
-		else if (!id.equals(other.id))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + "]";
+		return "Artikel [artikelid=" + id + ", artikelbezeichnung="
+				+ artikelbezeichnung + ", preis=" + preis + ", farbe=" + farbe
+				+ ", verfügbarkeit=" + verfügbarkeit + "]";
 	}
+
 }
-*/
