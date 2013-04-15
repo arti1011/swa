@@ -18,7 +18,7 @@ public class Artikel implements Serializable  {
 	private String artikelBezeichnung;
 	private Double preis;
 	private Set<ArtikelFarbeType> farbe;
-	private String verfügbarkeit;
+	private String verfuegbarkeit;
 	public Long getId() {
 		return id;
 	}
@@ -43,11 +43,11 @@ public class Artikel implements Serializable  {
 	public void setFarbe(Set<ArtikelFarbeType> farbe) {
 		this.farbe = farbe;
 	}
-	public String getVerfügbarkeit() {
-		return verfügbarkeit;
+	public String getVerfuegbarkeit() {
+		return verfuegbarkeit;
 	}
-	public void setVerfügbarkeit(String verfügbarkeit) {
-		this.verfügbarkeit = verfügbarkeit;
+	public void setVerfuegbarkeit(String verfuegbarkeit) {
+		this.verfuegbarkeit = verfuegbarkeit;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -79,7 +79,7 @@ public class Artikel implements Serializable  {
 	public String toString() {
 		return "Artikel [id=" + id + ", artikelBezeichnung="
 				+ artikelBezeichnung + ", preis=" + preis + ", farbe=" + farbe
-				+ ", verfügbarkeit=" + verfügbarkeit + "]";
+				+ ", verfuegbarkeit=" + verfuegbarkeit + "]";
 	}
 	
 	

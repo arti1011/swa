@@ -150,7 +150,7 @@ public final class Mock {
 			
 		artikel.setId(id);
 		artikel.setArtikelBezeichnung("" + bezeichnung);
-		artikel.setVerfügbarkeit("verfügbar");
+		artikel.setVerfuegbarkeit("verfuegbar");
 		artikel.setPreis(id + 1.5);
 		final Set<ArtikelFarbeType> farben = new HashSet<>();
 		farben.add(ArtikelFarbeType.BLAU);
@@ -183,12 +183,12 @@ public final class Mock {
 	}
 	
 	public static Artikel createArtikel(Artikel artikel) {
-		final String artikelbezeichnung = artikel.getArtikelBezeichnung();
-		
-		artikel.setId(Long.valueOf(artikelbezeichnung.length()));
+		final String artikelBezeichnung = artikel.getArtikelBezeichnung();
+		artikel.setArtikelBezeichnung(artikelBezeichnung);
+		artikel.setId(Long.valueOf(artikelBezeichnung.length()));
 		artikel.setPreis(artikel.getPreis());
 		artikel.setFarbe(artikel.getFarbe());
-		artikel.setVerfügbarkeit(artikel.getVerfügbarkeit());
+		artikel.setVerfuegbarkeit(artikel.getVerfuegbarkeit());
 		
 		System.out.println("Neuer Artikel: " +artikel);
 		return artikel;
