@@ -149,7 +149,7 @@ public final class Mock {
 				}
 			
 		artikel.setId(id);
-		artikel.setArtikelbezeichnung("" + bezeichnung);
+		artikel.setArtikelBezeichnung("" + bezeichnung);
 		artikel.setVerfügbarkeit("verfügbar");
 		artikel.setPreis(id + 1.5);
 		final Set<ArtikelFarbeType> farben = new HashSet<>();
@@ -176,14 +176,14 @@ public final class Mock {
 		final Collection<Artikel> artikelliste = new ArrayList<>(anzahl);
 		for (int i = 1; i <= anzahl; i++) {
 			final Artikel artikel = findArtikelById(Long.valueOf(i));
-			artikel.setArtikelbezeichnung(bezeichnung);
+			artikel.setArtikelBezeichnung(bezeichnung);
 			artikelliste.add(artikel);			
 		}
 		return artikelliste;
 	}
 	
 	public static Artikel createArtikel(Artikel artikel) {
-		final String artikelbezeichnung = artikel.getArtikelbezeichnung();
+		final String artikelbezeichnung = artikel.getArtikelBezeichnung();
 		
 		artikel.setId(Long.valueOf(artikelbezeichnung.length()));
 		artikel.setPreis(artikel.getPreis());
@@ -195,7 +195,7 @@ public final class Mock {
 	}
 	
 	public static void updateArtikel(Artikel artikel) {
-		System.out.println("Aktualisierter Artikel: " + artikel.getArtikelbezeichnung());
+		System.out.println("Aktualisierter Artikel: " + artikel.getArtikelBezeichnung());
 	}
 	
 	public static void deleteArtikel(Long artikelId) {
