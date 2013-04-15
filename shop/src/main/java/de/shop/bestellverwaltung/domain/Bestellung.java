@@ -15,6 +15,11 @@ public class Bestellung implements Serializable {
 	@JsonIgnore
 	private AbstractKunde kunde;
 	private URI kundeUri;
+	/*
+	 @JsonIgnore			//artikel in eine bestellung schreiben?!
+	 private Artikel artikel;
+	 private URI artikelUri		//get+set noch dazu
+	 */
 	
 	public Long getId() {
 		return id;
