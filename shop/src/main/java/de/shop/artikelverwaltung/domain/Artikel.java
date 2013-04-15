@@ -1,5 +1,5 @@
 package de.shop.artikelverwaltung.domain;
-
+//test
 import java.io.Serializable;
 // TODO überprüfen ob nötig
 //import java.net.URI;
