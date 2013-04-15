@@ -102,7 +102,7 @@ public class KundeResource {
 		
 		return kunden;
 	}
-	
+	//test
 	@GET
 	@Path("{id:[1-9][0-9]*}/bestellungen")
 	public Collection<Bestellung> findBestellungenByKundeId(@PathParam("id") Long kundeId) {
