@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
@@ -23,6 +24,7 @@ public final class Mock {
 	private static final int MAX_KUNDEN = 8;
 	private static final int MAX_BESTELLUNGEN = 4;
 	private static final int MAX_ARTIKEL = 15;
+	private static final int MAX_BESTELLPOSITIONEN = 6;
 	
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
@@ -89,7 +91,39 @@ public final class Mock {
 		
 		return bestellungen;
 	}
+	
+	public static Collection<Bestellposition> findBestellpositionenByBestellungId(Long bestellungId) {
+		final Bestellung bestellung = findBestellungById(bestellungId);
+		
+		// Beziehungsgeflecht zwischen Bestellung und Bestellpositionen aufbauen
+		final int anzahl = bestellungId.intValue() % MAX_BESTELLPOSITIONEN + 1;  // 1-7 Besetllpositionen
+		final List<Bestellposition> bestellpositionen = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Bestellposition bestellposition = findBestellpositionById(Long.valueOf(i));
+			bestellposition.setBestellung(bestellung);
+			bestellpositionen.add(bestellposition);			
+		}
+		bestellung.setBestellpositionen(bestellpositionen);
+		
+		return bestellpositionen;
+	}
 
+	public static Bestellposition findBestellpositionById(Long id) {
+		if (id > MAX_ID) {
+			return null;
+		}
+		
+		final Bestellung bestellung = findBestellungById(id);
+		final Artikel artikel = findArtikelById(id); 
+		final Bestellposition bestellposition = new Bestellposition();
+		bestellposition.setAnzahl(id + 2);
+		bestellposition.setArtikel(artikel);
+		bestellposition.setPositionId(id);
+		bestellposition.setBestellung(bestellung);
+		
+		return bestellposition;
+	}
+	
 	public static Bestellung findBestellungById(Long id) {
 		if (id > MAX_ID) {
 			return null;
@@ -135,16 +169,13 @@ public final class Mock {
 		final Artikel artikel = new Artikel();
 		final String bezeichnung;
 				
-		if(id % 3 == 2)
-				{
+		if (id % 3 == 2) {
 					bezeichnung = "Schrank Verstauviel";
 				}
-				else if(id %3 == 1)
-				{
+				else if (id % 3 == 1) {
 					bezeichnung = "Couch Potato";
 				}
-				else
-				{
+				else {
 					bezeichnung = "Tisch Vierbein";
 				}
 			
@@ -190,16 +221,48 @@ public final class Mock {
 		artikel.setFarbe(artikel.getFarbe());
 		artikel.setVerfuegbarkeit(artikel.getVerfuegbarkeit());
 		
-		System.out.println("Neuer Artikel: " +artikel);
+		System.out.println("Neuer Artikel: " + artikel);
 		return artikel;
+	}
+	
+	public static Bestellposition createBestellposition(Bestellposition bestellposition) {
+		final Long anzahl = bestellposition.getAnzahl();
+		bestellposition.setAnzahl(anzahl);
+		bestellposition.setBestellung(findBestellungById(anzahl+3));
+		bestellposition.setArtikel(findArtikelById(anzahl+5));
+		bestellposition.setPositionId(anzahl+1);
+		
+		System.out.println("Neuer Artikel: " + bestellposition);
+		return bestellposition;
+	}
+	
+	public static Bestellung createBestellung(Bestellung bestellung) {
+		int zahl = (int)(Math.random() * 6 + 1);
+		final Long anzahl = Long.valueOf(zahl);
+		bestellung.setKunde(findKundeById(anzahl));
+		bestellung.setId(anzahl+1);
+		bestellung.setKundeUri(bestellung.getKundeUri());
+		bestellung.setAusgeliefert(false);
+		
+		
+		System.out.println("Neuer Artikel: " + bestellung);
+		return bestellung;
 	}
 	
 	public static void updateArtikel(Artikel artikel) {
 		System.out.println("Aktualisierter Artikel: " + artikel.getArtikelBezeichnung());
 	}
 	
+	public static void updateBestellposition(Bestellposition bestellposition) {
+		System.out.println("Aktualisierte Bestellposition: " + bestellposition.getPositionId());
+	}
+	
 	public static void deleteArtikel(Long artikelId) {
-		System.out.println("Artikel mit ID=" +artikelId +" geloescht");
+		System.out.println("Artikel mit ID=" + artikelId + " geloescht");
+	}
+	
+	public static void deleteBestellposition(Long bestellpositionId) {
+		System.out.println("Bestellposition mit ID=" + bestellpositionId + " geloescht");
 	}
 
 	private Mock() { /**/ }

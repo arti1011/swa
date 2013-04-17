@@ -25,12 +25,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.artikelverwaltung.rest.UriHelperArtikel;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
 
-@Path("/Artikel")
+@Path("/artikel")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped

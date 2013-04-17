@@ -7,18 +7,18 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.artikelverwaltung.rest.ArtikelResource;
+import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.rest.KundeResource;
 
 
 @ApplicationScoped
 public class UriHelperArtikel {
 	public URI getUriArtikel(Artikel artikel, UriInfo uriInfo) {
 		final UriBuilder ub = uriInfo.getBaseUriBuilder()
-
 		                             .path(ArtikelResource.class)
-		                             .path(ArtikelResource.class, "findArtikelById")
-		                             .path(ArtikelResource.class, "findArtikelByBezeichnung");
+		                             .path(ArtikelResource.class, "findArikelById");
 		final URI artikelUri = ub.build(artikel.getId());
 		return artikelUri;
 	}
+	
 }
