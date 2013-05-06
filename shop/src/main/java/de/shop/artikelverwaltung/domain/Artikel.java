@@ -1,24 +1,41 @@
 package de.shop.artikelverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
 
 import java.io.Serializable;
-
-
-// TODO überprüfen ob nötig
-//import java.net.URI;
+import java.math.BigDecimal;
 import java.util.Set;
-// TODO überprüfen ob nötig
-//import org.codehaus.jackson.annotate.JsonIgnore;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import de.shop.util.IdGroup;
 
 public class Artikel implements Serializable  {
 	
 	private static final long serialVersionUID = 161835922543423714L;
 	
+	public static final int ARTIKELBEZEICHNUNG_LENGTH_MIN = 2;
+	public static final int ARTIKELBEZEICHNUNG_LENGTH_MAX = 32;
+	
+	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.artikelbezeichnung.notNull}")
+	@Size(min = ARTIKELBEZEICHNUNG_LENGTH_MIN, max = ARTIKELBEZEICHNUNG_LENGTH_MAX,
+	      message = "{artikelverwaltung.artikel.artikelbezeichnung.length}")
 	private String artikelBezeichnung;
-	private Double preis;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.preis.notNull}")
+	@DecimalMin("0.0")
+	private BigDecimal preis;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.farbe.notNull}")
 	private Set<ArtikelFarbeType> farbe;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.verfuegbarkeit.notNull}")
 	private String verfuegbarkeit;
+	
 	public Long getId() {
 		return id;
 	}
@@ -31,10 +48,10 @@ public class Artikel implements Serializable  {
 	public void setArtikelBezeichnung(String artikelBezeichnung) {
 		this.artikelBezeichnung = artikelBezeichnung;
 	}
-	public Double getPreis() {
+	public BigDecimal getPreis() {
 		return preis;
 	}
-	public void setPreis(Double preis) {
+	public void setPreis(BigDecimal preis) {
 		this.preis = preis;
 	}
 	public Set<ArtikelFarbeType> getFarbe() {

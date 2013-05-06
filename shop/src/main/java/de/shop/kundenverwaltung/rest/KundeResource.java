@@ -26,27 +26,36 @@ import javax.ws.rs.core.UriInfo;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.rest.UriHelperBestellung;
+import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.LocaleHelper;
-import de.shop.util.Mock;
+import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 
 @Path("/kunden")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
+@Log
 public class KundeResource {
 	@Context
 	private UriInfo uriInfo;
 	
 	@Context
 	private HttpHeaders headers;
-	
+
 	@Inject
 	private UriHelperKunde uriHelperKunde;
 	
 	@Inject
 	private UriHelperBestellung uriHelperBestellung;
+	
+	@Inject
+	private KundeService ks;
+	
+	@Inject
+	private BestellungService bs;
 	
 	@Inject
 	private LocaleHelper localeHelper;
@@ -61,11 +70,8 @@ public class KundeResource {
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public AbstractKunde findKundeById(@PathParam("id") Long id) {
-		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
-		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		final AbstractKunde kunde = Mock.findKundeById(id);
+		final AbstractKunde kunde = ks.findKundeById(id, locale);
 		if (kunde == null) {
 			throw new NotFoundException("Kein Kunde mit der ID " + id + " gefunden.");
 		}
@@ -77,20 +83,16 @@ public class KundeResource {
 	
 	@GET
 	public Collection<AbstractKunde> findKundenByNachname(@QueryParam("nachname") @DefaultValue("") String nachname) {
-		@SuppressWarnings("unused")
-		final Locale locale = localeHelper.getLocale(headers);
-		
 		Collection<AbstractKunde> kunden = null;
 		if ("".equals(nachname)) {
-			// TODO Anwendungskern statt Mock, Verwendung von Locale
-			kunden = Mock.findAllKunden();
+			kunden = ks.findAllKunden();
 			if (kunden.isEmpty()) {
 				throw new NotFoundException("Keine Kunden vorhanden.");
 			}
 		}
 		else {
-			// TODO Anwendungskern statt Mock, Verwendung von Locale
-			kunden = Mock.findKundenByNachname(nachname);
+			final Locale locale = localeHelper.getLocale(headers);
+			kunden = ks.findKundenByNachname(nachname, locale);
 			if (kunden.isEmpty()) {
 				throw new NotFoundException("Kein Kunde mit Nachname " + nachname + " gefunden.");
 			}
@@ -106,11 +108,7 @@ public class KundeResource {
 	@GET
 	@Path("{id:[1-9][0-9]*}/bestellungen")
 	public Collection<Bestellung> findBestellungenByKundeId(@PathParam("id") Long kundeId) {
-		@SuppressWarnings("unused")
-		final Locale locale = localeHelper.getLocale(headers);
-		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		final Collection<Bestellung> bestellungen = Mock.findBestellungenByKundeId(kundeId);
+		final Collection<Bestellung> bestellungen = bs.findBestellungenByKundeId(kundeId);
 		if (bestellungen.isEmpty()) {
 			throw new NotFoundException("Zur ID " + kundeId + " wurden keine Bestellungen gefunden");
 		}
@@ -127,12 +125,13 @@ public class KundeResource {
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response createKunde(AbstractKunde kunde) {
-		@SuppressWarnings("unused")
-		final Locale locale = localeHelper.getLocale(headers);
+		// Rueckwaertsverweis von Adresse zu Kunde setzen
+		kunde.getAdresse().setKunde(kunde);
 		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		kunde = Mock.createKunde(kunde);
+		final Locale locale = localeHelper.getLocale(headers);
+		kunde = ks.createKunde(kunde, locale);
 		final URI kundeUri = uriHelperKunde.getUriKunde(kunde, uriInfo);
+		
 		return Response.created(kundeUri).build();
 	}
 	
@@ -140,11 +139,10 @@ public class KundeResource {
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response updateKunde(AbstractKunde kunde) {
-		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
 		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		Mock.updateKunde(kunde);
+		ks.updateKunde(kunde, locale);
+		
 		return Response.noContent().build();
 	}
 	
@@ -152,11 +150,10 @@ public class KundeResource {
 	@Path("{id:[1-9][0-9]*}")
 	@Produces
 	public Response deleteKunde(@PathParam("id") Long kundeId) {
-		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
 		
-		// TODO Anwendungskern statt Mock, Verwendung von Locale
-		Mock.deleteKunde(kundeId);
+		ks.deleteKunde(kundeId, locale);
+		
 		return Response.noContent().build();
 	}
 }

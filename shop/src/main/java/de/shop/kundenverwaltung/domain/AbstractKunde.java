@@ -1,15 +1,27 @@
 package de.shop.kundenverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonSubTypes.Type;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.hibernate.validator.constraints.Email;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
+import de.shop.util.IdGroup;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -21,14 +33,42 @@ public abstract class AbstractKunde implements Serializable {
 	public static final String PRIVATKUNDE = "P";
 	public static final String FIRMENKUNDE = "F";
 	
+	//Pattern mit UTF-8 (statt Latin-1 bzw. ISO-8859-1) Schreibweise fuer Umlaute:
+	private static final String NAME_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF]+";
+	private static final String NACHNAME_PREFIX = "(o'|von|von der|von und zu|van)?";
+	
+	public static final String NACHNAME_PATTERN = NACHNAME_PREFIX + NAME_PATTERN + "(-" + NAME_PATTERN + ")?";
+	public static final int NACHNAME_LENGTH_MIN = 2;
+	public static final int NACHNAME_LENGTH_MAX = 32;
+	public static final int EMAIL_LENGTH_MAX = 128;
+
+	
+	@Min(value = MIN_ID, message = "{kundenverwaltung.kunde.id.min}", groups = IdGroup.class)
 	private Long id;
+
+	@NotNull(message = "{kundenverwaltung.kunde.nachname.notNull}")
+	@Size(min = NACHNAME_LENGTH_MIN, max = NACHNAME_LENGTH_MAX,
+	      message = "{kundenverwaltung.kunde.nachname.length}")
+	@Pattern(regexp = NACHNAME_PATTERN, message = "{kundenverwaltung.kunde.nachname.pattern}")
 	private String nachname;
+	
+	@Email(message = "{kundenverwaltung.kunde.email.pattern}")
+	@NotNull(message = "{kundenverwaltung.kunde.email.notNull}")
+	@Size(max = EMAIL_LENGTH_MAX, message = "{kundenverwaltung.kunde.email.length}")
 	private String email;
+
+	@Past(message = "{kundenverwaltung.kunde.seit.past}")
+	private Date seit;
+
+	@Valid
+	@NotNull(message = "{kundenverwaltung.kunde.adresse.notNull}")
 	private Adresse adresse;
+	
 	@JsonIgnore
 	private List<Bestellung> bestellungen;
+	
 	private URI bestellungenUri;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -46,6 +86,12 @@ public abstract class AbstractKunde implements Serializable {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Date getSeit() {
+		return seit;
+	}
+	public void setSeit(Date seit) {
+		this.seit = seit;
 	}
 	public Adresse getAdresse() {
 		return adresse;
@@ -94,7 +140,7 @@ public abstract class AbstractKunde implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "AbstractKunde [id=" + id + ", nachname=" + nachname
-				+ ", email=" + email + ", bestellungenUri=" + bestellungenUri + "]";
+		return "AbstractKunde [id=" + id + ", nachname=" + nachname + ", email=" + email
+				+ ", seit=" + seit + ", bestellungenUri=" + bestellungenUri + "]";
 	}
 }

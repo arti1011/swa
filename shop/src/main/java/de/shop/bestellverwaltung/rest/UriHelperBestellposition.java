@@ -11,9 +11,6 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.rest.UriHelperArtikel;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
-import de.shop.kundenverwaltung.rest.KundeResource;
-import de.shop.kundenverwaltung.rest.UriHelperKunde;
 
 
 @ApplicationScoped

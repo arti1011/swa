@@ -1,26 +1,36 @@
 package de.shop.bestellverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
 import java.io.Serializable;
 import java.net.URI;
-
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnore;
-
-import com.sun.xml.internal.rngom.util.Uri;
-
 import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.util.IdGroup;
 
 public class Bestellposition implements Serializable {
 
 	private static final long serialVersionUID = 1618359231454653714L;
 	
+	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellposition.positionId.min}", groups = IdGroup.class)
 	private Long positionId;
+	
+	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
 	@JsonIgnore
 	private Artikel artikel;
+	
 	private URI artikelUri;
+	
+	@NotNull(message = "{bestellverwaltung.bestellposition.bestellung.notNull}")
 	@JsonIgnore
 	private Bestellung bestellung;
+	
 	private URI bestellungUri;
-	private Long Anzahl;
+	
+	@Min(1)
+	private Long anzahl;
+	
 	public Long getPositionId() {
 		return positionId;
 	}
@@ -52,10 +62,10 @@ public class Bestellposition implements Serializable {
 		this.bestellungUri = bestellungUri;
 	}
 	public Long getAnzahl() {
-		return Anzahl;
+		return anzahl;
 	}
 	public void setAnzahl(Long anzahl) {
-		Anzahl = anzahl;
+		this.anzahl = anzahl;
 	}
 	@Override
 	public int hashCode() {
@@ -79,12 +89,14 @@ public class Bestellposition implements Serializable {
 		if (bestellung == null) {
 			if (other.bestellung != null)
 				return false;
-		} else if (!bestellung.equals(other.bestellung))
+		}
+		else if (!bestellung.equals(other.bestellung))
 			return false;
 		if (positionId == null) {
 			if (other.positionId != null)
 				return false;
-		} else if (!positionId.equals(other.positionId))
+		}
+		else if (!positionId.equals(other.positionId))
 			return false;
 		return true;
 	}
@@ -92,10 +104,8 @@ public class Bestellposition implements Serializable {
 	public String toString() {
 		return "Bestellposition [positionId=" + positionId + ", artikel="
 				+ artikel + ", artikelUri=" + artikelUri + ", bestellung="
-				+ bestellung + ", bestellungUri=" + bestellungUri + ", Anzahl="
-				+ Anzahl + "]";
+				+ bestellung + ", bestellungUri=" + bestellungUri + ", anzahl="
+				+ anzahl + "]";
 	}
-	
-	
-	
+
 }
