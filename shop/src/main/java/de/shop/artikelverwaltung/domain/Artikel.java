@@ -5,10 +5,12 @@ import static de.shop.util.Constants.MIN_ID;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
+
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import de.shop.util.IdGroup;
 
 public class Artikel implements Serializable  {
@@ -27,7 +29,7 @@ public class Artikel implements Serializable  {
 	private String artikelBezeichnung;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.preis.notNull}")
-	@DecimalMin("0.0")
+	@DecimalMin(value = "0.0", message = "{artikelverwaltung.artikel.preis.min}")
 	private BigDecimal preis;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.farbe.notNull}")

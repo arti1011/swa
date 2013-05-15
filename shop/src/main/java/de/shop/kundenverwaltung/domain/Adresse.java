@@ -25,7 +25,7 @@ public class Adresse implements Serializable {
 	private Long id;
 	
 	@NotNull(message = "{kundenverwaltung.adresse.plz.notNull}")
-	@Pattern(regexp = "\\d{5}", message = "{kundenverwaltung.adresse.plz}")
+	@Pattern(regexp = "\\d{5}", message = "{kundenverwaltung.adresse.plz.digits}")
 	private String plz;
 	
 	@NotNull(message = "{kundenverwaltung.adresse.ort.notNull}")

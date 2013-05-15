@@ -10,6 +10,7 @@ public interface ArtikelService {
 	Artikel createArtikel(Artikel artikel, Locale locale);
 	Artikel updateArtikel(Artikel artikel, Locale locale);
 	Artikel deleteArtikel(Long artikelId, Locale locale);
-	List<Artikel> findArtikelByBezeichnung(String bezeichnung);
+	List<Artikel> findArtikelByBezeichnung(String bezeichnung, Locale locale);
+	List<Artikel> findAllArtikel();
 }
 

@@ -13,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.IdGroup;
+import de.shop.util.PreExistingGroup;
 
 
 public class Bestellung implements Serializable {
@@ -23,17 +24,14 @@ public class Bestellung implements Serializable {
 	
 	private boolean ausgeliefert;
 	
-	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}")
+	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}", groups = PreExistingGroup.class)
 	@JsonIgnore
 	private AbstractKunde kunde;
 	
 	private URI kundeUri;
 	
 	@NotNull(message = "{bestellverwaltung.bestellung.bestellpositionen.notNull}")
-	@JsonIgnore
 	private List<Bestellposition> bestellpositionen;
-	
-	private URI bestellpositionenUri;
 	
 	public Long getId() {
 		return id;
@@ -69,14 +67,6 @@ public class Bestellung implements Serializable {
 		this.bestellpositionen = bestellpositionen;
 	}
 	
-	public URI getBestellpositionenUri() {
-		return bestellpositionenUri;
-	}
-	
-	public void setBestellpositionenUri(URI bestellpositionenUri) {
-		this.bestellpositionenUri = bestellpositionenUri;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -102,13 +92,11 @@ public class Bestellung implements Serializable {
 			return false;
 		return true;
 	}
-	
 	@Override
 	public String toString() {
 		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert
 				+ ", kunde=" + kunde + ", kundeUri=" + kundeUri
-				+ ", bestellpositionen=" + bestellpositionen
-				+ ", bestellpositionenUri=" + bestellpositionenUri + "]";
+				+ ", bestellpositionen=" + bestellpositionen + "]";
 	}
-
+	
 }

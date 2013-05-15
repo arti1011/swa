@@ -33,7 +33,7 @@ public final class Mock {
 	private static final int JAHR = 2001;
 	private static final int MONAT = 0; // bei Calendar werden die Monate von 0 bis 11 gezaehlt
 	private static final int TAG = 31;  // bei Calendar die Monatstage ab 1 gezaehlt
-	private static final int MAX_BESTELLPOSITIONEN = 6;
+	private static final int MAX_ARTIKEL = 15;
 
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
@@ -145,6 +145,17 @@ public final class Mock {
 		bestellung.setId(id);
 		bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
+		final List<Bestellposition> bestellpositionen = new ArrayList<>();
+		
+		for(int i = 0; i <= 3; i++){
+			final Bestellposition bestellposition = new Bestellposition();
+			bestellposition.setAnzahl(new Long(i+2));
+			bestellposition.setArtikel(findArtikelById(new Long(i+3)));
+			bestellposition.setPositionId(new Long(i+1));
+			bestellpositionen.add(bestellposition);
+		}
+	
+		bestellung.setBestellpositionen(bestellpositionen);
 		
 		return bestellung;
 	}
@@ -171,8 +182,10 @@ public final class Mock {
 		LOGGER.infof("Geloeschter Kunde: %s", kunde);
 	}
 
-	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde) {
-		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
+	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, List<Bestellposition> bestellpositionen) {
+		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt", bestellung, kunde, bestellpositionen);
+		final String nachname = kunde.getNachname();
+		bestellung.setId(Long.valueOf(nachname.length()));
 		return bestellung;
 	}
 
@@ -218,20 +231,14 @@ public final class Mock {
 		return artikelliste;
 	}
 	
-	public static List<Bestellposition> findBestellpositionenByBestellungId(Long bestellungId) {
-		final Bestellung bestellung = findBestellungById(bestellungId);
-		
-		// Beziehungsgeflecht zwischen Bestellung und Bestellpositionen aufbauen
-		final int anzahl = bestellungId.intValue() % MAX_BESTELLPOSITIONEN + 1;  // 1-7 Besetllpositionen
-		final List<Bestellposition> bestellpositionen = new ArrayList<>(anzahl);
+	public static List<Artikel> findAllArtikel() {
+		final int anzahl = MAX_ARTIKEL;
+		final List<Artikel> artikelliste = new ArrayList<>(anzahl);
 		for (int i = 1; i <= anzahl; i++) {
-			final Bestellposition bestellposition = findBestellpositionById(Long.valueOf(i));
-			bestellposition.setBestellung(bestellung);
-			bestellpositionen.add(bestellposition);			
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikelliste.add(artikel);			
 		}
-		bestellung.setBestellpositionen(bestellpositionen);
-		
-		return bestellpositionen;
+		return artikelliste;
 	}
 
 	public static Bestellposition findBestellpositionById(Long id) {
@@ -239,13 +246,12 @@ public final class Mock {
 			return null;
 		}
 		
-		final Bestellung bestellung = findBestellungById(id);
+		
 		final Artikel artikel = findArtikelById(id); 
 		final Bestellposition bestellposition = new Bestellposition();
 		bestellposition.setAnzahl(id + 2);
 		bestellposition.setArtikel(artikel);
 		bestellposition.setPositionId(id);
-		bestellposition.setBestellung(bestellung);
 		
 		return bestellposition;
 	}
