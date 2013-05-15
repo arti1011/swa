@@ -1,25 +1,37 @@
 package de.shop.bestellverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+
 import java.io.Serializable;
 import java.net.URI;
+import java.util.List;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.util.IdGroup;
+import de.shop.util.PreExistingGroup;
+
 
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
 	
+	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id;
+	
 	private boolean ausgeliefert;
+	
+	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}", groups = PreExistingGroup.class)
 	@JsonIgnore
 	private AbstractKunde kunde;
+	
 	private URI kundeUri;
-	/*
-	 @JsonIgnore			//artikel in eine bestellung schreiben?!
-	 private Artikel artikel;
-	 private URI artikelUri		//get+set noch dazu
-	 */
+	
+	@NotNull(message = "{bestellverwaltung.bestellung.bestellpositionen.notNull}")
+	private List<Bestellposition> bestellpositionen;
 	
 	public Long getId() {
 		return id;
@@ -46,6 +58,15 @@ public class Bestellung implements Serializable {
 	public void setKundeUri(URI kundeUri) {
 		this.kundeUri = kundeUri;
 	}
+	
+	public List<Bestellposition> getBestellpositionen() {
+		return bestellpositionen;
+	}
+	
+	public void setBestellpositionen(List<Bestellposition> bestellpositionen) {
+		this.bestellpositionen = bestellpositionen;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -53,6 +74,7 @@ public class Bestellung implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -70,9 +92,11 @@ public class Bestellung implements Serializable {
 			return false;
 		return true;
 	}
-	
 	@Override
 	public String toString() {
-		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + "]";
+		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert
+				+ ", kunde=" + kunde + ", kundeUri=" + kundeUri
+				+ ", bestellpositionen=" + bestellpositionen + "]";
 	}
+	
 }

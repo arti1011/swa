@@ -1,15 +1,38 @@
 package de.shop.kundenverwaltung.domain;
 
+import static de.shop.util.Constants.MIN_ID;
+
 import java.io.Serializable;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import de.shop.util.IdGroup;
+
+
 public class Adresse implements Serializable {
 	private static final long serialVersionUID = -3029272617931844501L;
+	
+	public static final int PLZ_LENGTH_MAX = 5;
+	public static final int ORT_LENGTH_MIN = 2;
+	public static final int ORT_LENGTH_MAX = 32;
+	
+	@Min(value = MIN_ID, message = "{kundenverwaltung.adresse.id.min}", groups = IdGroup.class)
 	private Long id;
+	
+	@NotNull(message = "{kundenverwaltung.adresse.plz.notNull}")
+	@Pattern(regexp = "\\d{5}", message = "{kundenverwaltung.adresse.plz.digits}")
 	private String plz;
+	
+	@NotNull(message = "{kundenverwaltung.adresse.ort.notNull}")
+	@Size(min = ORT_LENGTH_MIN, max = ORT_LENGTH_MAX, message = "{kundenverwaltung.adresse.ort.length}")
 	private String ort;
 	
+	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
 	@JsonIgnore
 	private AbstractKunde kunde;
 	
@@ -55,7 +78,7 @@ public class Adresse implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Adresse other = (Adresse) obj;
+		final Adresse other = (Adresse) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
