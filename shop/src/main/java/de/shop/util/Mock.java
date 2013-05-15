@@ -34,6 +34,7 @@ public final class Mock {
 	private static final int MONAT = 0; // bei Calendar werden die Monate von 0 bis 11 gezaehlt
 	private static final int TAG = 31;  // bei Calendar die Monatstage ab 1 gezaehlt
 	private static final int MAX_ARTIKEL = 15;
+	private static final int KONSTANTE = 3;
 
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
@@ -147,11 +148,11 @@ public final class Mock {
 		bestellung.setKunde(kunde);
 		final List<Bestellposition> bestellpositionen = new ArrayList<>();
 		
-		for(int i = 0; i <= 3; i++){
+		for (int i = 0; i <= KONSTANTE; i++) {
 			final Bestellposition bestellposition = new Bestellposition();
-			bestellposition.setAnzahl(new Long(i+2));
-			bestellposition.setArtikel(findArtikelById(new Long(i+3)));
-			bestellposition.setPositionId(new Long(i+1));
+			bestellposition.setAnzahl(Long.valueOf(i + 2));
+			bestellposition.setArtikel(findArtikelById(Long.valueOf(i + KONSTANTE)));
+			bestellposition.setPositionId(Long.valueOf(i + 1));
 			bestellpositionen.add(bestellposition);
 		}
 	
@@ -182,8 +183,10 @@ public final class Mock {
 		LOGGER.infof("Geloeschter Kunde: %s", kunde);
 	}
 
-	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, List<Bestellposition> bestellpositionen) {
-		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt", bestellung, kunde, bestellpositionen);
+	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde,
+			List<Bestellposition> bestellpositionen) {
+		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt",
+				bestellung, kunde, bestellpositionen);
 		final String nachname = kunde.getNachname();
 		bestellung.setId(Long.valueOf(nachname.length()));
 		return bestellung;
@@ -197,10 +200,10 @@ public final class Mock {
 		final Artikel artikel = new Artikel();
 		final String bezeichnung;
 				
-		if (id % 3 == 2) {
+		if (id % KONSTANTE == 2) {
 					bezeichnung = "Schrank Verstauviel";
 				}
-				else if (id % 3 == 1) {
+				else if (id % KONSTANTE == 1) {
 					bezeichnung = "Couch Potato";
 				}
 				else {

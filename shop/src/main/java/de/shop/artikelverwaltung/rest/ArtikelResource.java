@@ -102,7 +102,7 @@ public class ArtikelResource {
 	@Produces
 	public Response createArtikel(Artikel artikel) {
 		final Locale locale = localeHelper.getLocale(headers);
-		artikel = as.createArtikel(artikel, locale);
+		as.createArtikel(artikel, locale);
 		
 		return Response.noContent().build();
 	}

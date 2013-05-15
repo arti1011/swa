@@ -68,7 +68,7 @@ public class KundeService implements Serializable {
 		validateNachname(nachname, locale);
 		
 		// TODO Datenbanzugriffsschicht statt Mock
-		List<AbstractKunde> kunden = Mock.findKundenByNachname(nachname);
+		final List<AbstractKunde> kunden = Mock.findKundenByNachname(nachname);
 		return kunden;
 	}
 	

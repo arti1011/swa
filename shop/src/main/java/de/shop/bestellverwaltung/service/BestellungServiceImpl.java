@@ -62,7 +62,8 @@ public class BestellungServiceImpl implements BestellungService, Serializable {
 	}
 
 	@Override
-	public Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, List<Bestellposition> bestellpositionen, Locale locale) {
+	public Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, 
+			List<Bestellposition> bestellpositionen, Locale locale) {
 		validateBestellung(bestellung, locale, Default.class);
 		validateBestellpositionen(bestellpositionen, locale, Default.class);
 		
