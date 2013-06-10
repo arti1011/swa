@@ -135,5 +135,13 @@ public class Bestellposition implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Bestellposition [positionId=" + positionId + ", artikel="
+				+ artikel + ", artikelUri=" + artikelUri + ", anzahl=" + anzahl
+				+ "]";
+	}
+	
 	
 }

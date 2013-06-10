@@ -313,7 +313,7 @@ public abstract class AbstractKunde implements Serializable {
 	public void setErzeugt(Date erzeugt) {
 		this.erzeugt = erzeugt == null ? null : (Date) erzeugt.clone();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -321,7 +321,7 @@ public abstract class AbstractKunde implements Serializable {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -334,15 +334,19 @@ public abstract class AbstractKunde implements Serializable {
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		}
-		else if (!email.equals(other.email))
+		} else if (!email.equals(other.email))
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "AbstractKunde [id=" + id + ", nachname=" + nachname + ", email=" + email
-				+ ", seit=" + seit + ", bestellungenUri=" + bestellungenUri + "]";
+		return "AbstractKunde [id=" + id + ", nachname=" + nachname
+				+ ", email=" + email + ", seit=" + seit + ", adresse="
+				+ adresse + ", bestellungen=" + bestellungen
+				+ ", bestellungenUri=" + bestellungenUri + ", erzeugt="
+				+ erzeugt + ", aktualisiert=" + aktualisiert + "]";
 	}
+	
+
 }
