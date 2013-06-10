@@ -45,7 +45,7 @@ public class ArtikelServiceImpl implements ArtikelService, Serializable {
 	}
 	
 	public Artikel findArtikelById(Long artikelId, Locale locale) {
-		validateArtikelId(artikelId, locale);
+		validateArtikelId(artikelId, locale, IdGroup.class);
 
 		// TODO Datenbanzugriffsschicht statt Mock
 		return Mock.findArtikelById(artikelId);
@@ -126,7 +126,7 @@ public class ArtikelServiceImpl implements ArtikelService, Serializable {
 		}
 	}
 	
-	private void validateArtikelId(Long artikelId, Locale locale) {
+	private void validateArtikelId(Long artikelId, Locale locale, Class<?>... groups) {
 		final Validator validator = validatorProvider.getValidator(locale);
 		final Set<ConstraintViolation<Artikel>> violations = validator.validateValue(Artikel.class,
 				                                                                           "id",
