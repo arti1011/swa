@@ -50,10 +50,6 @@ import de.shop.util.PreExistingGroup;
                 query = "SELECT b"
 			            + " FROM   Bestellung b"
 						+ " WHERE  b.kunde = :" + Bestellung.PARAM_KUNDE),
-   	@NamedQuery(name  = Bestellung.FIND_BESTELLUNG_BY_ID_FETCH_LIEFERUNGEN,
-			    query = "SELECT DISTINCT b"
-                        + " FROM   Bestellung b LEFT JOIN FETCH b.lieferungen"
-   			            + " WHERE  b.id = :" + Bestellung.PARAM_ID),
 	@NamedQuery(name  = Bestellung.FIND_KUNDE_BY_ID,
  			    query = "SELECT b.kunde"
                         + " FROM   Bestellung b"
@@ -66,8 +62,6 @@ public class Bestellung implements Serializable {
 	
 	private static final String PREFIX = "Bestellung.";
 	public static final String FIND_BESTELLUNGEN_BY_KUNDE = PREFIX + "findBestellungenByKunde";
-	public static final String FIND_BESTELLUNG_BY_ID_FETCH_LIEFERUNGEN =
-		                       PREFIX + "findBestellungenByIdFetchLieferungen";
 	public static final String FIND_KUNDE_BY_ID = PREFIX + "findBestellungKundeById";
 	
 	public static final String PARAM_KUNDE = "kunde";
@@ -79,14 +73,13 @@ public class Bestellung implements Serializable {
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id;
 	
-	
-	private boolean ausgeliefert;
-	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}", groups = PreExistingGroup.class)
 	@JsonIgnore
 	private AbstractKunde kunde;
+	
+	private boolean ausgeliefert;
 	
 	@Transient
 	private URI kundeUri;

@@ -79,21 +79,21 @@ public class ArtikelResource {
 	}
 	
 	@GET
-	public List<Artikel> findArtikelByBezeichnung(@QueryParam("bezeichnung") 
-		@DefaultValue("") String bezeichnung) {
+	public List<Artikel> findArtikelBySuchbegriff(@QueryParam("suchbegriff") 
+		@DefaultValue("") String suchbegriff) {
 		final Locale locale = localeHelper.getLocale(headers);
 		
 		List<Artikel> artikelliste = null;
-		if ("".equals(bezeichnung)) {
-			artikelliste = as.findAllArtikel();
+		if ("".equals(suchbegriff)) {
+			artikelliste = as.findVerfuegbareArtikel();
 			if (artikelliste.isEmpty()) {
 				throw new NotFoundException("Keine Artikel vorhanden.");
 			}
 		}
 		else {
-			artikelliste = as.findArtikelByBezeichnung(bezeichnung, locale);
+			artikelliste = as.findArtikelBySuchbegriff(suchbegriff, locale);
 			if (artikelliste.isEmpty()) {
-				throw new NotFoundException("Kein Artikel mit Bezeichnung " + bezeichnung + " gefunden.");
+				throw new NotFoundException("Unter dem Suchbegriff " + suchbegriff + " wurde kein Artikel gefunden.");
 			}
 		}		
 		return artikelliste;
@@ -125,8 +125,8 @@ public class ArtikelResource {
 	@Produces
 	public Response deleteArtikel(@PathParam("id") Long artikelId) {
 		final Locale locale = localeHelper.getLocale(headers);
-		
-		as.deleteArtikel(artikelId, locale);
+		final Artikel artikel = as.findArtikelById(artikelId, locale);
+		as.deleteArtikel(artikel, locale);
 		
 		return Response.noContent().build();
 	}

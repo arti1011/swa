@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,19 +38,23 @@ import de.shop.util.IdGroup;
 	@NamedQuery(name  = Artikel.FIND_VERFUEGBARE_ARTIKEL,
             	query = "SELECT      a"
             	        + " FROM     Artikel a"
-						+ " WHERE    a.ausgesondert = FALSE"
+						+ " WHERE    a.verfuegbar = TRUE"
                         + " ORDER BY a.id ASC"),
-	@NamedQuery(name  = Artikel.FIND_ARTIKEL_BY_BEZ,
+	@NamedQuery(name  = Artikel.FIND_ARTIKEL_BY_SUCHBEGRIFF,
             	query = "SELECT      a"
                         + " FROM     Artikel a"
-						+ " WHERE    a.bezeichnung LIKE :" + Artikel.PARAM_BEZEICHNUNG
-						+ "          AND a.ausgesondert = FALSE"
+						+ " WHERE    a.artikelBezeichnung LIKE :" + Artikel.PARAM_SUCHBEGRIFF
+						+ "          AND a.verfuegbar = TRUE"
 			 	        + " ORDER BY a.id ASC"),
    	@NamedQuery(name  = Artikel.FIND_ARTIKEL_MAX_PREIS,
             	query = "SELECT      a"
                         + " FROM     Artikel a"
 						+ " WHERE    a.preis < :" + Artikel.PARAM_PREIS
-			 	        + " ORDER BY a.id ASC")
+			 	        + " ORDER BY a.id ASC"),
+	@NamedQuery(name = Artikel.FIND_ARTIKEL_BY_BEZEICHNUNG,
+				query = "SELECT		 a"
+						+ " FROM	 Artikel a"
+						+ " WHERE    a.artikelBezeichnung = :" + Artikel.PARAM_BEZEICHNUNG)
 })
 public class Artikel implements Serializable  {
 	
@@ -60,11 +63,13 @@ public class Artikel implements Serializable  {
 	
 	private static final String PREFIX = "Artikel.";
 	public static final String FIND_VERFUEGBARE_ARTIKEL = PREFIX + "findVerfuegbareArtikel";
-	public static final String FIND_ARTIKEL_BY_BEZ = PREFIX + "findArtikelByBez";
+	public static final String FIND_ARTIKEL_BY_SUCHBEGRIFF = PREFIX + "findArtikelBySuchbegriff";
 	public static final String FIND_ARTIKEL_MAX_PREIS = PREFIX + "findArtikelByMaxPreis";
-
+	public static final String FIND_ARTIKEL_BY_BEZEICHNUNG = PREFIX + "findArtikelByBezeichnung";
+	
 	public static final String PARAM_BEZEICHNUNG = "bezeichnung";
 	public static final String PARAM_PREIS = "preis";
+	public static final String PARAM_SUCHBEGRIFF = "suchbegriff";
 	
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MIN = 2;
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MAX = 32;
@@ -85,13 +90,7 @@ public class Artikel implements Serializable  {
 	@DecimalMin(value = "0.0", message = "{artikelverwaltung.artikel.preis.min}")
 	private BigDecimal preis;
 	
-	@Column(nullable = false)
-	@NotNull(message = "{artikelverwaltung.artikel.farbe.notNull}")
-	private Set<ArtikelFarbeType> farbe;
-	
-	@Column(nullable = false)
-	@NotNull(message = "{artikelverwaltung.artikel.verfuegbarkeit.notNull}")
-	private String verfuegbarkeit;
+	private boolean verfuegbar;
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
@@ -118,20 +117,14 @@ public class Artikel implements Serializable  {
 	public BigDecimal getPreis() {
 		return preis;
 	}
+	public boolean isVerfuegbar() {
+		return verfuegbar;
+	}
+	public void setVerfuegbar(boolean verfuegbar) {
+		this.verfuegbar = verfuegbar;
+	}
 	public void setPreis(BigDecimal preis) {
 		this.preis = preis;
-	}
-	public Set<ArtikelFarbeType> getFarbe() {
-		return farbe;
-	}
-	public void setFarbe(Set<ArtikelFarbeType> farbe) {
-		this.farbe = farbe;
-	}
-	public String getVerfuegbarkeit() {
-		return verfuegbarkeit;
-	}
-	public void setVerfuegbarkeit(String verfuegbarkeit) {
-		this.verfuegbarkeit = verfuegbarkeit;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -201,9 +194,9 @@ public class Artikel implements Serializable  {
 	@Override
 	public String toString() {
 		return "Artikel [id=" + id + ", artikelBezeichnung="
-				+ artikelBezeichnung + ", preis=" + preis + ", farbe=" + farbe
-				+ ", verfuegbarkeit=" + verfuegbarkeit + ", erzeugt=" + erzeugt
-				+ ", aktualisiert=" + aktualisiert + "]";
+				+ artikelBezeichnung + ", preis=" + preis + ", verfuegbar="
+				+ verfuegbar + ", erzeugt=" + erzeugt + ", aktualisiert="
+				+ aktualisiert + "]";
 	}
-	
+
 }

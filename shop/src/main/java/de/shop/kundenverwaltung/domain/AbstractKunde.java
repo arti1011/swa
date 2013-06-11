@@ -124,6 +124,7 @@ public abstract class AbstractKunde implements Serializable {
 	public static final String NACHNAME_PATTERN = NACHNAME_PREFIX + NAME_PATTERN + "(-" + NAME_PATTERN + ")?";
 	public static final int NACHNAME_LENGTH_MIN = 2;
 	public static final int NACHNAME_LENGTH_MAX = 32;
+	public static final int VORNAME_LENGTH_MAX = 32;
 	public static final int EMAIL_LENGTH_MAX = 128;
 	
 	private static final String PREFIX = "AbstractKunde.";
@@ -162,6 +163,10 @@ public abstract class AbstractKunde implements Serializable {
 	      message = "{kundenverwaltung.kunde.nachname.length}")
 	@Pattern(regexp = NACHNAME_PATTERN, message = "{kundenverwaltung.kunde.nachname.pattern}")
 	private String nachname;
+	
+	@Column(length = VORNAME_LENGTH_MAX)
+	@Size(max = VORNAME_LENGTH_MAX, message = "{kundenverwaltung.kunde.vorname.length}")
+	private String vorname;
 	
 	@Column(length = EMAIL_LENGTH_MAX, nullable = false, unique = true)
 	@Email(message = "{kundenverwaltung.kunde.email.pattern}")
@@ -210,6 +215,13 @@ public abstract class AbstractKunde implements Serializable {
 	@PreUpdate
 	protected void preUpdate() {
 		aktualisiert = new Date();
+	}
+	
+	public void setValues(AbstractKunde k) {
+		nachname = k.nachname;
+		vorname = k.vorname;
+		seit = k.seit;
+		email = k.email;
 	}
 	
 	public Date getSeit() {
@@ -342,11 +354,12 @@ public abstract class AbstractKunde implements Serializable {
 	@Override
 	public String toString() {
 		return "AbstractKunde [id=" + id + ", nachname=" + nachname
-				+ ", email=" + email + ", seit=" + seit + ", adresse="
-				+ adresse + ", bestellungen=" + bestellungen
-				+ ", bestellungenUri=" + bestellungenUri + ", erzeugt="
-				+ erzeugt + ", aktualisiert=" + aktualisiert + "]";
+				+ ", vorname=" + vorname + ", email=" + email + ", seit="
+				+ seit + ", adresse=" + adresse + ", bestellungen="
+				+ bestellungen + ", bestellungenUri=" + bestellungenUri
+				+ ", erzeugt=" + erzeugt + ", aktualisiert=" + aktualisiert
+				+ "]";
 	}
-	
+
 
 }
