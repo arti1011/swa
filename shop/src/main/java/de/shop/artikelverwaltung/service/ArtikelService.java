@@ -169,11 +169,10 @@ public class ArtikelService implements Serializable {
 		if (tmp != null) {
 			em.detach(tmp);
 			if (tmp.getId().longValue() != artikel.getId().longValue()) {
-				// anderes Objekt mit gleichem Attributwert fuer email
 				throw new BezeichnungExistsException(artikel.getArtikelBezeichnung());
 			}
 		}
-		
+		artikel.setErzeugt(tmp.getErzeugt());
 		em.merge(artikel);
 		return artikel;
 	}

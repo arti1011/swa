@@ -67,11 +67,6 @@ import de.shop.util.IdGroup;
 		        query = "SELECT   k"
 				        + " FROM  AbstractKunde k"
 		                + " ORDER BY k.id"),
-	@NamedQuery(name  = AbstractKunde.FIND_IDS_BY_PREFIX,
-		        query = "SELECT   k.id"
-		                + " FROM  AbstractKunde k"
-		                + " WHERE CONCAT('', k.id) LIKE :" + AbstractKunde.PARAM_KUNDE_ID_PREFIX
-		                + " ORDER BY k.id"),
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN_BY_NACHNAME,
 	            query = "SELECT k"
 				        + " FROM   AbstractKunde k"
@@ -166,6 +161,7 @@ public abstract class AbstractKunde implements Serializable {
 	
 	@Column(length = VORNAME_LENGTH_MAX)
 	@Size(max = VORNAME_LENGTH_MAX, message = "{kundenverwaltung.kunde.vorname.length}")
+	@NotNull(message = "{kundenverwaltung.kunde.vorname.notNull}")
 	private String vorname;
 	
 	@Column(length = EMAIL_LENGTH_MAX, nullable = false, unique = true)
@@ -222,6 +218,13 @@ public abstract class AbstractKunde implements Serializable {
 		vorname = k.vorname;
 		seit = k.seit;
 		email = k.email;
+	}
+	
+	public String getVorname() {
+		return vorname;
+	}
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
 	}
 	
 	public Date getSeit() {
@@ -353,12 +356,12 @@ public abstract class AbstractKunde implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AbstractKunde [id=" + id + ", nachname=" + nachname
-				+ ", vorname=" + vorname + ", email=" + email + ", seit="
-				+ seit + ", adresse=" + adresse + ", bestellungen="
-				+ bestellungen + ", bestellungenUri=" + bestellungenUri
-				+ ", erzeugt=" + erzeugt + ", aktualisiert=" + aktualisiert
-				+ "]";
+		return "AbstractKunde [id=" + id
+			   + ", nachname=" + nachname + ", vorname=" + vorname
+			   + ", seit=" + getSeitAsString(DateFormat.MEDIUM, Locale.GERMANY)
+			   + ", email=" + email
+			   + ", erzeugt=" + erzeugt
+			   + ", aktualisiert=" + aktualisiert + "]";
 	}
 
 

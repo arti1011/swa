@@ -23,11 +23,12 @@ import org.jboss.logging.Logger;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.service.NeueBestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.service.NeuerKunde;
 import de.shop.util.Config;
 
 @ApplicationScoped
 @Stateful
-public class BestellungObserver implements Serializable {
+public class ShopObserver implements Serializable {
 	private static final long serialVersionUID = -1567643645881819340L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String NEWLINE = System.getProperty("line.separator");
@@ -79,6 +80,49 @@ public class BestellungObserver implements Serializable {
 			// Text setzen mit MIME Type "text/plain"
 			final StringBuilder sb = new StringBuilder(32);
 			sb.append("Neue Bestellung Nr. " + bestellung.getId() + NEWLINE);
+			final String text = sb.toString();
+			LOGGER.trace(text);
+			message.setText(text);
+
+			// Hohe Prioritaet einstellen
+			//message.setHeader("Importance", "high");
+			//message.setHeader("Priority", "urgent");
+			//message.setHeader("X-Priority", "1");
+
+			Transport.send(message);
+		}
+		catch (MessagingException | UnsupportedEncodingException e) {
+			LOGGER.error(e.getMessage());
+			return;
+		}
+	}
+	
+	@Asynchronous
+	public void onCreateKunde(@Observes @NeuerKunde AbstractKunde kunde) {
+
+		final String mailEmpfaenger = kunde.getEmail();
+		if (absenderMail == null || mailEmpfaenger == null) {
+			return;
+		}
+		final String nameEmpfaenger = kunde.getNachname();
+		
+		final MimeMessage message = new MimeMessage(mailSession);
+
+		try {
+			// Absender setzen
+			final InternetAddress absenderObj = new InternetAddress(absenderMail, absenderName);
+			message.setFrom(absenderObj);
+			
+			// Empfaenger setzen
+			final InternetAddress empfaenger = new InternetAddress(mailEmpfaenger, nameEmpfaenger);
+			message.setRecipient(RecipientType.TO, empfaenger);   // RecipientType: TO, CC, BCC
+
+			// Subject setzen
+			message.setSubject("Ihre Registrierung bei Shop.de");
+			
+			// Text setzen mit MIME Type "text/plain"
+			final StringBuilder sb = new StringBuilder(32);
+			sb.append("Sehr geehrte/r" + kunde.getVorname() +" " + kunde.getNachname()+",\n"+"wir danken Ihnen für Ihre Registrierung. Ihre Kunden-ID lautet: " + kunde.getId() + NEWLINE);
 			final String text = sb.toString();
 			LOGGER.trace(text);
 			message.setText(text);

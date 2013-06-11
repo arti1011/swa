@@ -73,6 +73,7 @@ public class Artikel implements Serializable  {
 	
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MIN = 2;
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MAX = 32;
+	public static final int PREIS_MINIMUM = 0;
 	
 	@Id
 	@GeneratedValue
@@ -86,8 +87,9 @@ public class Artikel implements Serializable  {
 	      message = "{artikelverwaltung.artikel.artikelbezeichnung.length}")
 	private String artikelBezeichnung = "";
 	
+	@Column(nullable = false)
 	@NotNull(message = "{artikelverwaltung.artikel.preis.notNull}")
-	@DecimalMin(value = "0.0", message = "{artikelverwaltung.artikel.preis.min}")
+	@DecimalMin(value = "PREIS_MINIMUM", message = "{artikelverwaltung.artikel.preis.min}")
 	private BigDecimal preis;
 	
 	private boolean verfuegbar;

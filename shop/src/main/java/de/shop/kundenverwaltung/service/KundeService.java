@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,6 +32,7 @@ import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.AbstractKunde_;
+import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.util.IdGroup;
 import de.shop.util.Log;
 import de.shop.util.ValidatorProvider;
@@ -52,6 +54,10 @@ public class KundeService implements Serializable {
 	
 	@PersistenceContext
 	private transient EntityManager em;
+	
+	@Inject
+	@NeuerKunde
+	private transient Event<AbstractKunde> event;
 	
 	@Inject
 	private ValidatorProvider validatorProvider;
@@ -130,13 +136,6 @@ public class KundeService implements Serializable {
 		return nachnamen;
 	}
 	
-	public List<Long> findIdsByPrefix(String idPrefix) {
-		final List<Long> ids = em.createNamedQuery(AbstractKunde.FIND_IDS_BY_PREFIX, Long.class)
-				                 .setParameter(AbstractKunde.PARAM_KUNDE_ID_PREFIX, idPrefix + '%')
-				                 .getResultList();
-		return ids;
-	}
-	
 	private void validateEmail(String email, Locale locale) {
 		final Validator validator = validatorProvider.getValidator(locale);
 		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
@@ -196,14 +195,15 @@ public class KundeService implements Serializable {
 		}
 		
 		em.persist(kunde);
+		event.fire(kunde);
 		return kunde;		
 	}
 	
-	public AbstractKunde updateKunde(AbstractKunde kunde, Locale locale) {
+	public AbstractKunde updateKunde(AbstractKunde kunde, Adresse adresse, Locale locale) {
 		if (kunde == null) {
 			return null;
 		}
-
+		
 		// Werden alle Constraints beim Modifizieren gewahrt?
 		validateKunde(kunde, locale, Default.class, IdGroup.class);
 		
@@ -219,8 +219,8 @@ public class KundeService implements Serializable {
 				throw new EmailExistsException(kunde.getEmail());
 			}
 		}
-
 		em.merge(kunde);
+		em.merge(adresse);
 		return kunde;
 	}
 	

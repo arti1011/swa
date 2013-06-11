@@ -33,8 +33,6 @@ import de.shop.bestellverwaltung.rest.UriHelperBestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
-import de.shop.kundenverwaltung.domain.Firmenkunde;
-import de.shop.kundenverwaltung.domain.Privatkunde;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.LocaleHelper;
@@ -194,6 +192,11 @@ public class KundeResource {
 	@Produces
 	public void updateKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
+		final Adresse adresse = kunde.getAdresse();
+		if(adresse == null) {
+			throw new NotFoundException("Keine Adresse");
+		}
+		adresse.setKunde(kunde);
 		
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE, locale);
@@ -203,13 +206,14 @@ public class KundeResource {
 			throw new NotFoundException(msg);
 		}
 		LOGGER.tracef("Kunde vorher: %s", origKunde);
-	
+		final Adresse origAdresse = origKunde.getAdresse();
+		origAdresse.setValues(adresse);
 		// Daten des vorhandenen Kunden ueberschreiben
 		origKunde.setValues(kunde);
 		LOGGER.tracef("Kunde nachher: %s", origKunde);
 		
 		// Update durchfuehren
-		kunde = ks.updateKunde(origKunde, locale);
+		kunde = ks.updateKunde(origKunde, origAdresse, locale);
 		if (kunde == null) {
 			// TODO msg passend zu locale
 			final String msg = "Kein Kunde gefunden mit der ID " + origKunde.getId();
@@ -228,13 +232,6 @@ public class KundeResource {
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE, locale);
 		ks.deleteKunde(kunde);
-	}
-	
-	@GET
-	@Path("/prefix/id/{id:[1-9][0-9]*}")
-	public Collection<Long> findIdsByPrefix(@PathParam("id") String idPrefix) {
-		final Collection<Long> ids = ks.findIdsByPrefix(idPrefix);
-		return ids;
 	}
 	
 	@GET

@@ -87,6 +87,11 @@ public class Adresse implements Serializable {
 		aktualisiert = new Date();
 	}
 	
+	public void setValues(Adresse a) {
+		plz = a.plz;
+		ort = a.ort;
+	}
+	
 	public Long getId() {
 		return id;
 	}
