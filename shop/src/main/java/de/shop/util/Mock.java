@@ -189,7 +189,7 @@ public final class Mock {
 				bestellung, kunde, bestellpositionen);
 		final String nachname = kunde.getNachname();
 		bestellung.setId(Long.valueOf(nachname.length()));
-		return bestellung;
+		return bestellung;//-->builder pattern
 	}
 
 	public static Artikel findArtikelById(Long id) {

@@ -6,7 +6,7 @@ import java.util.Locale;
 import de.shop.artikelverwaltung.domain.Artikel;
 
 public interface ArtikelService {
-	Artikel findArtikelById(Long id, Locale locale);
+	Artikel findArtikelById(Long id, Locale locale);//was ist locale??
 	Artikel createArtikel(Artikel artikel, Locale locale);
 	Artikel updateArtikel(Artikel artikel, Locale locale);
 	Artikel deleteArtikel(Long artikelId, Locale locale);
