@@ -122,7 +122,8 @@ public class ShopObserver implements Serializable {
 			
 			// Text setzen mit MIME Type "text/plain"
 			final StringBuilder sb = new StringBuilder(32);
-			sb.append("Sehr geehrte/r" + kunde.getVorname() +" " + kunde.getNachname()+",\n"+"wir danken Ihnen für Ihre Registrierung. Ihre Kunden-ID lautet: " + kunde.getId() + NEWLINE);
+			sb.append("Sehr geehrte/r" + kunde.getVorname() + " " + kunde.getNachname() + ",\n" 
+					+ "wir danken Ihnen für Ihre Registrierung. Ihre Kunden-ID lautet: " + kunde.getId() + NEWLINE);
 			final String text = sb.toString();
 			LOGGER.trace(text);
 			message.setText(text);

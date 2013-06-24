@@ -5,6 +5,7 @@ import javax.validation.ConstraintViolation;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 
+
 public abstract class AbstractArtikelValidationException extends AbstractArtikelServiceException {
 	private static final long serialVersionUID = -6924234959157503601L;
 	private final Collection<ConstraintViolation<Artikel>> violations;

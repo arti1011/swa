@@ -73,7 +73,7 @@ public class Artikel implements Serializable  {
 	
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MIN = 2;
 	public static final int ARTIKELBEZEICHNUNG_LENGTH_MAX = 32;
-	public static final int PREIS_MINIMUM = 0;
+	public static final String PREIS_MINIMUM = "0";
 	
 	@Id
 	@GeneratedValue
@@ -89,7 +89,7 @@ public class Artikel implements Serializable  {
 	
 	@Column(nullable = false)
 	@NotNull(message = "{artikelverwaltung.artikel.preis.notNull}")
-	@DecimalMin(value = "PREIS_MINIMUM", message = "{artikelverwaltung.artikel.preis.min}")
+	@DecimalMin(value = PREIS_MINIMUM, message = "{artikelverwaltung.artikel.preis.min}")
 	private BigDecimal preis;
 	
 	private boolean verfuegbar;
@@ -146,6 +146,11 @@ public class Artikel implements Serializable  {
 	private void preUpdate() {
 		aktualisiert = new Date();
 	}
+	public void setValues(Artikel a) {
+		artikelBezeichnung = a.artikelBezeichnung;
+		verfuegbar = a.verfuegbar;
+		preis = a.preis;
+	}
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
 	}
@@ -184,12 +189,14 @@ public class Artikel implements Serializable  {
 		if (artikelBezeichnung == null) {
 			if (other.artikelBezeichnung != null)
 				return false;
-		} else if (!artikelBezeichnung.equals(other.artikelBezeichnung))
+		} 
+		else if (!artikelBezeichnung.equals(other.artikelBezeichnung))
 			return false;
 		if (preis == null) {
 			if (other.preis != null)
 				return false;
-		} else if (!preis.equals(other.preis))
+		}
+		else if (!preis.equals(other.preis))
 			return false;
 		return true;
 	}

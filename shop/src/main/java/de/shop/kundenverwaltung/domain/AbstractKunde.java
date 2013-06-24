@@ -349,7 +349,8 @@ public abstract class AbstractKunde implements Serializable {
 		if (email == null) {
 			if (other.email != null)
 				return false;
-		} else if (!email.equals(other.email))
+		}
+		else if (!email.equals(other.email))
 			return false;
 		return true;
 	}

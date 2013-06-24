@@ -1,5 +1,6 @@
 package de.shop.artikelverwaltung.rest;
 
+import static de.shop.util.Constants.KEINE_ID;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.invoke.MethodHandles;
@@ -68,6 +69,7 @@ public class ArtikelResource {
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Artikel findArtikelById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
+
 		final Locale locale = localeHelper.getLocale(headers);
 		final Artikel artikel = as.findArtikelById(id, locale);
 		if (artikel == null) {
@@ -103,6 +105,9 @@ public class ArtikelResource {
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response createArtikel(Artikel artikel) {
+		
+		artikel.setId(KEINE_ID);
+		
 		final Locale locale = localeHelper.getLocale(headers);
 		as.createArtikel(artikel, locale);
 		
@@ -114,8 +119,21 @@ public class ArtikelResource {
 	@Produces
 	public Response updateArtikel(Artikel artikel) {
 		final Locale locale = localeHelper.getLocale(headers);
-		
-		as.updateArtikel(artikel, locale);
+		final Artikel origArtikel = as.findArtikelById(artikel.getId(), locale);
+		if (origArtikel == null) {
+			// TODO msg passend zu locale
+			final String msg = "Kein Artikel gefunden mit der ID " + artikel.getId();
+			throw new NotFoundException(msg);
+		}
+		LOGGER.tracef("Artikel vorher: %s", origArtikel);
+		origArtikel.setValues(artikel);
+		LOGGER.tracef("Artikel nachher: %s", origArtikel);
+		artikel = as.updateArtikel(origArtikel, locale);
+		if (artikel == null) {
+			// TODO msg passend zu locale
+			final String msg = "Kein Artikel gefunden mit der ID " + origArtikel.getId();
+			throw new NotFoundException(msg);
+		}
 		
 		return Response.noContent().build();
 	}

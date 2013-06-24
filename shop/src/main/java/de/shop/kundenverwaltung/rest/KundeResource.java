@@ -170,11 +170,14 @@ public class KundeResource {
 
 		kunde.setId(KEINE_ID);
 		
+		
 		final Adresse adresse = kunde.getAdresse();
 		if (adresse != null) {
 			adresse.setKunde(kunde);
+			adresse.setId(KEINE_ID);
 		}
 		kunde.setBestellungenUri(null);
+		kunde.setAdresse(adresse);
 		
 		kunde = ks.createKunde(kunde, locale);
 		LOGGER.tracef("Kunde: %s", kunde);
@@ -193,7 +196,7 @@ public class KundeResource {
 	public void updateKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Adresse adresse = kunde.getAdresse();
-		if(adresse == null) {
+		if (adresse == null) {
 			throw new NotFoundException("Keine Adresse");
 		}
 		adresse.setKunde(kunde);
@@ -231,6 +234,11 @@ public class KundeResource {
 	public void deleteKunde(@PathParam("id") Long kundeId) {
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE, locale);
+		if (kunde == null) {
+			// TODO msg passend zu locale
+			final String msg = "Kein Kunde gefunden mit der ID " + kundeId;
+			throw new NotFoundException(msg);
+		}
 		ks.deleteKunde(kunde);
 	}
 	

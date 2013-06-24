@@ -1,5 +1,8 @@
 package de.shop.util;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException(rollback = true)
 public class NotFoundException extends RuntimeException {
 	private static final long serialVersionUID = -866705588853138386L;
 

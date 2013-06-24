@@ -126,12 +126,14 @@ public class Bestellposition implements Serializable {
 		if (artikel == null) {
 			if (other.artikel != null)
 				return false;
-		} else if (!artikel.equals(other.artikel))
+		}
+		else if (!artikel.equals(other.artikel))
 			return false;
 		if (positionId == null) {
 			if (other.positionId != null)
 				return false;
-		} else if (!positionId.equals(other.positionId))
+		}
+		else if (!positionId.equals(other.positionId))
 			return false;
 		return true;
 	}

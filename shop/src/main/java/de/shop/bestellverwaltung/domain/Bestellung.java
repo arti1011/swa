@@ -216,12 +216,14 @@ public class Bestellung implements Serializable {
 		if (erzeugt == null) {
 			if (other.erzeugt != null)
 				return false;
-		} else if (!erzeugt.equals(other.erzeugt))
+		}
+		else if (!erzeugt.equals(other.erzeugt))
 			return false;
 		if (kunde == null) {
 			if (other.kunde != null)
 				return false;
-		} else if (!kunde.equals(other.kunde))
+		}
+		else if (!kunde.equals(other.kunde))
 			return false;
 		return true;
 	}

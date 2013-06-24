@@ -178,7 +178,6 @@ public class KundeService implements Serializable {
 		if (kunde == null) {
 			return kunde;
 		}
-
 		// Werden alle Constraints beim Einfuegen gewahrt?
 		validateKunde(kunde, locale, Default.class);
 		

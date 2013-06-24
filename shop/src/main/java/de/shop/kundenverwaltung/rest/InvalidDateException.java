@@ -1,7 +1,10 @@
 package de.shop.kundenverwaltung.rest;
 
+import javax.ejb.ApplicationException;
+
 import de.shop.kundenverwaltung.service.AbstractKundeServiceException;
 
+@ApplicationException(rollback = true)
 public class InvalidDateException extends AbstractKundeServiceException {
 	private static final long serialVersionUID = 2113917506853352685L;
 	

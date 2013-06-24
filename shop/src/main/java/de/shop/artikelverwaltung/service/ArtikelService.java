@@ -64,7 +64,7 @@ public class ArtikelService implements Serializable {
 	
 	public Artikel findArtikelById(Long artikelId, Locale locale) {
 		validateArtikelId(artikelId, locale, IdGroup.class);
-		final Artikel artikel =em.find(Artikel.class, artikelId);
+		final Artikel artikel = em.find(Artikel.class, artikelId);
 		return artikel;
 	}
 	
@@ -122,10 +122,15 @@ public class ArtikelService implements Serializable {
 		}
 		validateBezeichnung(bezeichnung, locale);
 		
+		try {
 		final Artikel artikel = em.createNamedQuery(Artikel.FIND_ARTIKEL_BY_BEZEICHNUNG, Artikel.class)
 								.setParameter(Artikel.PARAM_BEZEICHNUNG, bezeichnung)
 								.getSingleResult();
 		return artikel;
+		}
+		catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	public List<Artikel> findArtikelByMaxPreis(double preis) {
@@ -136,7 +141,7 @@ public class ArtikelService implements Serializable {
 	}
 	
 	public Artikel createArtikel(Artikel artikel, Locale locale) {
-		if(artikel == null) {
+		if (artikel == null) {
 			return artikel;
 		}
 		validateArtikel(artikel, locale, Default.class);
@@ -156,8 +161,9 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
+	
 	public Artikel updateArtikel(Artikel artikel, Locale locale) {
-		if(artikel == null) {
+		if (artikel == null) {
 			return artikel;
 		}
 		
@@ -172,7 +178,6 @@ public class ArtikelService implements Serializable {
 				throw new BezeichnungExistsException(artikel.getArtikelBezeichnung());
 			}
 		}
-		artikel.setErzeugt(tmp.getErzeugt());
 		em.merge(artikel);
 		return artikel;
 	}
@@ -180,10 +185,10 @@ public class ArtikelService implements Serializable {
 
 
 	public void deleteArtikel(Artikel artikel, Locale locale) {
-		if(artikel == null) {
+		if (artikel == null) {
 			return;
 		}
-		if(artikel.isVerfuegbar()== false) {
+		if (!artikel.isVerfuegbar()) {
 			return;
 		}
 		artikel.setVerfuegbar(false);
