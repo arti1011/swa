@@ -33,6 +33,7 @@ import de.shop.util.IdGroup;
 import de.shop.util.Log;
 import de.shop.util.ValidatorProvider;
 
+
 @Log
 public class ArtikelService implements Serializable {
 	
@@ -229,4 +230,5 @@ public class ArtikelService implements Serializable {
 		if (!violations.isEmpty())
 			throw new InvalidArtikelIdException(artikelId, violations);
 	}
+
 }
