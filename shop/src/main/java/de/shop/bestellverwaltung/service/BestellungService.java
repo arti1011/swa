@@ -12,7 +12,6 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
 
@@ -29,7 +28,7 @@ public class BestellungService implements Serializable {
 
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
-	@PersistenceContext
+	@Inject
 	private transient EntityManager em;
 	
 	@Inject
