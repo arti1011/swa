@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -20,9 +18,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
@@ -33,9 +28,7 @@ import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.AbstractKunde_;
 import de.shop.kundenverwaltung.domain.Adresse;
-import de.shop.util.IdGroup;
 import de.shop.util.interceptor.Log;
-import de.shop.util.ValidatorProvider;
 
 @Log
 public class KundeService implements Serializable {
@@ -58,9 +51,6 @@ public class KundeService implements Serializable {
 	@Inject
 	@NeuerKunde
 	private transient Event<AbstractKunde> event;
-	
-	@Inject
-	private ValidatorProvider validatorProvider;
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -100,8 +90,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 	
-	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch, Locale locale) {
-		validateNachname(nachname, locale);
+	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch) {
 		
 		List<AbstractKunde> kunden;
 		switch (fetch) {
@@ -136,18 +125,7 @@ public class KundeService implements Serializable {
 		return nachnamen;
 	}
 	
-	private void validateEmail(String email, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "email",
-				                                                                           email,
-				                                                                           Default.class);
-		if (!violations.isEmpty())
-			throw new InvalidEmailException(email, violations);
-	}
-	
-	public AbstractKunde findKundeById(Long id, FetchType fetch, Locale locale) {
-		validateKundeId(id, locale);
+	public AbstractKunde findKundeById(Long id, FetchType fetch) {
 		
 		AbstractKunde kunde = null;
 		try {
@@ -174,12 +152,10 @@ public class KundeService implements Serializable {
 		return kunde;
 	}
 	
-	public AbstractKunde createKunde(AbstractKunde kunde, Locale locale) {
+	public AbstractKunde createKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return kunde;
 		}
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		validateKunde(kunde, locale, Default.class);
 		
 		// Pruefung, ob die Email-Adresse schon existiert
 		try {
@@ -198,19 +174,16 @@ public class KundeService implements Serializable {
 		return kunde;		
 	}
 	
-	public AbstractKunde updateKunde(AbstractKunde kunde, Adresse adresse, Locale locale) {
+	public AbstractKunde updateKunde(AbstractKunde kunde, Adresse adresse) {
 		if (kunde == null) {
 			return null;
 		}
-		
-		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateKunde(kunde, locale, Default.class, IdGroup.class);
 		
 		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
 		em.detach(kunde);
 		
 		// Gibt es ein anderes Objekt mit gleicher Email-Adresse?
-		final AbstractKunde	tmp = findKundeByEmail(kunde.getEmail(), locale);
+		final AbstractKunde	tmp = findKundeByEmail(kunde.getEmail());
 		if (tmp != null) {
 			em.detach(tmp);
 			if (tmp.getId().longValue() != kunde.getId().longValue()) {
@@ -223,8 +196,7 @@ public class KundeService implements Serializable {
 		return kunde;
 	}
 	
-	public AbstractKunde findKundeByEmail(String email, Locale locale) {
-		validateEmail(email, locale);
+	public AbstractKunde findKundeByEmail(String email) {
 		try {
 			final AbstractKunde kunde = em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_EMAIL, AbstractKunde.class)
 					                      .setParameter(AbstractKunde.PARAM_KUNDE_EMAIL, email)
@@ -243,7 +215,7 @@ public class KundeService implements Serializable {
 		
 		// Bestellungen laden, damit sie anschl. ueberprueft werden koennen
 		try {
-			kunde = findKundeById(kunde.getId(), FetchType.MIT_BESTELLUNGEN, Locale.getDefault());
+			kunde = findKundeById(kunde.getId(), FetchType.MIT_BESTELLUNGEN);
 		}
 		catch (InvalidKundeIdException e) {
 			return;
@@ -309,41 +281,5 @@ public class KundeService implements Serializable {
 		final List<AbstractKunde> kunden = em.createQuery(criteriaQuery).getResultList();
 		return kunden;
 	}
-	
-	private void validateKundeId(Long kundeId, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "id",
-				                                                                           kundeId,
-				                                                                           IdGroup.class);
-		if (!violations.isEmpty())
-			throw new InvalidKundeIdException(kundeId, violations);
-	}
-	
-	
-	
-	private void validateNachname(String nachname, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "nachname",
-				                                                                           nachname,
-				                                                                           Default.class);
-		if (!violations.isEmpty())
-			throw new InvalidNachnameException(nachname, violations);
-	}
-
-	
-	private void validateKunde(AbstractKunde kunde, Locale locale, Class<?>... groups) {
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validate(kunde, groups);
-		if (!violations.isEmpty()) {
-			throw new InvalidKundeException(kunde, violations);
-		}
-	}
-
-	
-
 	
 }
