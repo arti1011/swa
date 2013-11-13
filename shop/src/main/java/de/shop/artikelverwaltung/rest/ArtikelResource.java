@@ -1,4 +1,5 @@
 package de.shop.artikelverwaltung.rest;
+import javax.transaction.Transactional;
 
 import static de.shop.util.Constants.KEINE_ID;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -11,7 +12,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -26,11 +26,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
-
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
+
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
 
@@ -98,11 +99,11 @@ public class ArtikelResource {
 		}		
 		return artikelliste;
 	}
-	
+
 	@POST
 	@Consumes(APPLICATION_JSON)
-	@Transactional
 	@Produces
+	@Transactional
 	public Response createArtikel(Artikel artikel) {
 		
 		artikel.setId(KEINE_ID);
@@ -112,11 +113,11 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+
 	@PUT
 	@Consumes(APPLICATION_JSON)
-	@Transactional
 	@Produces
+	@Transactional
 	public Response updateArtikel(Artikel artikel) {
 		final Locale locale = localeHelper.getLocale(headers);
 		final Artikel origArtikel = as.findArtikelById(artikel.getId(), locale);
@@ -137,11 +138,11 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+
 	@DELETE
 	@Path("{id:[1-9][0-9]*}")
-	@Transactional
 	@Produces
+	@Transactional
 	public Response deleteArtikel(@PathParam("id") Long artikelId) {
 		final Locale locale = localeHelper.getLocale(headers);
 		final Artikel artikel = as.findArtikelById(artikelId, locale);

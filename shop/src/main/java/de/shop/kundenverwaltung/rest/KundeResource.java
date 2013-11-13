@@ -26,6 +26,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
@@ -36,6 +37,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
+
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
 
@@ -161,10 +163,11 @@ public class KundeResource {
 	 * @param kunde neuer Kunde
 	 * @return Response-Objekt mit URL des neuen Kunden
 	 */
+	
 	@POST
 	@Consumes(APPLICATION_JSON)
-	@Transactional
 	@Produces
+	@Transactional
 	public Response createKunde(AbstractKunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 
@@ -190,10 +193,11 @@ public class KundeResource {
 	 * Mit der URL /kunden einen Kunden per PUT aktualisieren
 	 * @param kunde zu aktualisierende Daten des Kunden
 	 */
+
 	@PUT
 	@Consumes(APPLICATION_JSON)
-	@Transactional
 	@Produces
+	@Transactional
 	public void updateKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Adresse adresse = kunde.getAdresse();
@@ -229,10 +233,11 @@ public class KundeResource {
 	 * Mit der URL /kunden{id} einen Kunden per DELETE l&ouml;schen
 	 * @param kundeId des zu l&ouml;schenden Kunden
 	 */
+
 	@Path("{id:[0-9]+}")
 	@DELETE
-	@Transactional
 	@Produces
+	@Transactional
 	public void deleteKunde(@PathParam("id") Long kundeId) {
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE, locale);
