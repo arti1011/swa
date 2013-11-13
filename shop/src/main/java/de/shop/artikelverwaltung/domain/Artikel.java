@@ -1,7 +1,7 @@
 package de.shop.artikelverwaltung.domain;
 
+import static de.shop.util.Constants.ERSTE_VERSION;
 import static de.shop.util.Constants.KEINE_ID;
-import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
@@ -9,31 +9,34 @@ import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
-
-import de.shop.util.IdGroup;
 
 
 
 @Entity
-@Table(name = "artikel")
+@Table(indexes = @Index(columnList = "artikelBezeichnung"))
 @NamedQueries({
 	@NamedQuery(name  = Artikel.FIND_VERFUEGBARE_ARTIKEL,
             	query = "SELECT      a"
@@ -56,6 +59,8 @@ import de.shop.util.IdGroup;
 						+ " FROM	 Artikel a"
 						+ " WHERE    a.artikelBezeichnung = :" + Artikel.PARAM_BEZEICHNUNG)
 })
+@Cacheable
+@XmlRootElement
 public class Artikel implements Serializable  {
 	
 	private static final long serialVersionUID = 4377328456462469678L;
@@ -78,8 +83,11 @@ public class Artikel implements Serializable  {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
-	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
+	
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 	
 	@Column(length = ARTIKELBEZEICHNUNG_LENGTH_MAX, nullable = false)
 	@NotNull(message = "{artikelverwaltung.artikel.artikelbezeichnung.notNull}")
@@ -94,14 +102,14 @@ public class Artikel implements Serializable  {
 	
 	private boolean verfuegbar;
 	
-	@Column(nullable = false)
+	@Basic(optional = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date erzeugt;
 
-	@Column(nullable = false)
+	@Basic(optional = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 	
 	public Long getId() {
@@ -142,6 +150,11 @@ public class Artikel implements Serializable  {
 		LOGGER.debugf("Neuer Artikel mit ID=%d", id);
 	}
 	
+	@PostUpdate
+	private void postUpdate() {
+		LOGGER.debugf("Artikel mit ID=%s aktualisiert: version=%d", id, version);
+	}
+	
 	@PreUpdate
 	private void preUpdate() {
 		aktualisiert = new Date();
@@ -165,6 +178,13 @@ public class Artikel implements Serializable  {
 
 	public void setAktualisiert(Date aktualisiert) {
 		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+	}
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	@Override
 	public int hashCode() {
@@ -202,10 +222,10 @@ public class Artikel implements Serializable  {
 	}
 	@Override
 	public String toString() {
-		return "Artikel [id=" + id + ", artikelBezeichnung="
-				+ artikelBezeichnung + ", preis=" + preis + ", verfuegbar="
-				+ verfuegbar + ", erzeugt=" + erzeugt + ", aktualisiert="
-				+ aktualisiert + "]";
+		return "Artikel [id=" + id + ", version=" + version
+				+ ", artikelBezeichnung=" + artikelBezeichnung + ", preis="
+				+ preis + ", verfuegbar=" + verfuegbar + ", erzeugt=" + erzeugt
+				+ ", aktualisiert=" + aktualisiert + "]";
 	}
 
 }
