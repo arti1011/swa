@@ -26,7 +26,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 import de.shop.artikelverwaltung.domain.Artikel;
