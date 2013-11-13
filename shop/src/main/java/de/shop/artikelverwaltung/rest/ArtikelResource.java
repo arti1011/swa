@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -30,16 +31,13 @@ import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
 
 @Path("/artikel")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class ArtikelResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -103,6 +101,7 @@ public class ArtikelResource {
 	
 	@POST
 	@Consumes(APPLICATION_JSON)
+	@Transactional
 	@Produces
 	public Response createArtikel(Artikel artikel) {
 		
@@ -116,6 +115,7 @@ public class ArtikelResource {
 	
 	@PUT
 	@Consumes(APPLICATION_JSON)
+	@Transactional
 	@Produces
 	public Response updateArtikel(Artikel artikel) {
 		final Locale locale = localeHelper.getLocale(headers);
@@ -140,6 +140,7 @@ public class ArtikelResource {
 	
 	@DELETE
 	@Path("{id:[1-9][0-9]*}")
+	@Transactional
 	@Produces
 	public Response deleteArtikel(@PathParam("id") Long artikelId) {
 		final Locale locale = localeHelper.getLocale(headers);

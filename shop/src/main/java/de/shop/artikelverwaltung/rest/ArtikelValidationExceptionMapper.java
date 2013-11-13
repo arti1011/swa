@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.AbstractArtikelValidationException;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 
 
 @Provider

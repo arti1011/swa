@@ -16,23 +16,30 @@
 	3) Verzeichnis "target" loeschen
 		 mvn clean
 	
-	(Un-) Deployment nur mit Maven und ohne Eclipse/WTP
-	4) Deployment in einen laufenden JBoss
+	(Un-) Deployment nur mit Maven, d.h. ohne Eclipse/WTP
+	4) Deployment in einen laufenden WildFly-Server
 		 mvn -DskipTests package jboss-as:deploy
 	5) Undeployment
-		 mvn -DskipTests jboss-as:undeploy
+		 mvn jboss-as:undeploy
+
+	Abhängigkeiten anzeigen sowie Sources und javadoc zu den JARs herunterladen
+	6)   mvn dependency:tree
+	7)   mvn dependency:sources
+	8)   mvn dependency:resolve -Dclassifier=javadoc -Dtype=jar
 
 	Qualitaetssicherung mit FindBugs, Checkstyle und PMD (fuer z.B. Jenkins)
-	6)   mvn -DskipTests findbugs:findbugs checkstyle:checkstyle pmd:pmd
+	9)   mvn -DskipTests findbugs:findbugs checkstyle:checkstyle pmd:pmd
 
-	Abhängigkeiten anzeigen
-	7)   mvn dependency:tree
-	
 	Versionsnummern auf Aktualitaet pruefen
-	8) JARs ueberpruefen
-	      mvn versions:display-dependency-updates
-	9) Plugins ueberpruefen
-	      mvn versions:display-plugin-updates
+	10) JARs ueberpruefen
+	     mvn versions:display-dependency-updates
+	11) Plugins ueberpruefen
+	     mvn versions:display-plugin-updates
+
+	Eclipse: rechte Maustaste > Properties > Java Compiler > Annotation Processing
+               Enable project specific settings
+	           Generated source directory: target/generated-sources/apt
+	                                       target/generated-sources/annotations ohne maven-processor-plugin
 -->
 
 	<modelVersion>4.0.0</modelVersion>
@@ -44,14 +51,13 @@
 	
 	<url>http://www.iwi.hs-karlsruhe.de</url>
 	<inceptionYear>2009</inceptionYear>
-	<description>Web-Projekt mit Integrationstests mit Arquillian</description>
-	<prerequisites>
-		<maven>3.0.4</maven>
-	</prerequisites>
+	<description>Semester-Projekt</description>
 	
+	<!-- scm = source code management = Versionsmanagement -->
 	<scm>
-		<developerConnection>scm:git:http://www.iwi.hs-karlsruhe.de/git/arti1011.git</developerConnection>
-		<url>http://www.iwi.hs-karlsruhe.de/git/arti1011.git</url>
+		<connection>scm:git:https://github.com/juergenzimmermann/shop.git</connection>
+		<url>https://github.com/juergenzimmermann/shop.git</url>
+		<developerConnection>scm:git:https://github.com/juergenzimmermann/shop.git</developerConnection>
 	</scm>
 	
 	<licenses>
@@ -68,82 +74,14 @@
 	
 	<developers>
 		<developer>
-			<id>dwle1011</id>
-			<name>Leon Dworschak</name>
-			<email>dlw1011@HS-Karlsruhe.de</email>
+			<id>Juergen.Zimmermann</id>
+			<name>J&#252;rgen Zimmermann</name>
+			<email>Juergen.Zimmermann@HS-Karlsruhe.de</email>
 			<url>http://www.iwi.hs-karlsruhe.de</url>
 			<organization>Hochschule Karlsruhe</organization>
 			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
 			<roles>
-				<role>Student</role>
-			</roles>
-			<timezone>+1</timezone>     <!-- relativ zu GMT -->
-			<properties>
-				<!--
-				<picUrl>http://my.host.com/my/pic.gif</picUrl>
-				-->
-			</properties>
-		</developer>
-		<developer>
-			<id>egja1011</id>
-			<name>Jan Egger</name>
-			<email>egja1011@HS-Karlsruhe.de</email>
-			<url>http://www.iwi.hs-karlsruhe.de</url>
-			<organization>Hochschule Karlsruhe</organization>
-			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
-			<roles>
-				<role>Student</role>
-			</roles>
-			<timezone>+1</timezone>     <!-- relativ zu GMT -->
-			<properties>
-				<!--
-				<picUrl>http://my.host.com/my/pic.gif</picUrl>
-				-->
-			</properties>
-		</developer>
-		<developer>
-			<id>arti1011</id>
-			<name>Till Arzner</name>
-			<email>arti1011@HS-Karlsruhe.de</email>
-			<url>http://www.iwi.hs-karlsruhe.de</url>
-			<organization>Hochschule Karlsruhe</organization>
-			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
-			<roles>
-				<role>Student</role>
-			</roles>
-			<timezone>+1</timezone>     <!-- relativ zu GMT -->
-			<properties>
-				<!--
-				<picUrl>http://my.host.com/my/pic.gif</picUrl>
-				-->
-			</properties>
-		</developer>
-		<developer>
-			<id>ride1011</id>
-			<name>Dennis Richter</name>
-			<email>ride1011@HS-Karlsruhe.de</email>
-			<url>http://www.iwi.hs-karlsruhe.de</url>
-			<organization>Hochschule Karlsruhe</organization>
-			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
-			<roles>
-				<role>Student</role>
-			</roles>
-			<timezone>+1</timezone>     <!-- relativ zu GMT -->
-			<properties>
-				<!--
-				<picUrl>http://my.host.com/my/pic.gif</picUrl>
-				-->
-			</properties>
-		</developer>
-		<developer>
-			<id>gupa1012</id>
-			<name>Patrick G&#252;nther-Schmidt</name>
-			<email>gupa1012@HS-Karlsruhe.de</email>
-			<url>http://www.iwi.hs-karlsruhe.de</url>
-			<organization>Hochschule Karlsruhe</organization>
-			<organizationUrl>http://www.iwi.hs-karlsruhe.de</organizationUrl>
-			<roles>
-				<role>Student</role>
+				<role>Dozent</role>
 			</roles>
 			<timezone>+1</timezone>     <!-- relativ zu GMT -->
 			<properties>
@@ -153,92 +91,111 @@
 			</properties>
 		</developer>
 	</developers>
+	
+	<mailingLists>
+		<mailingList>
+			<name>ILIAS Forum</name>
+			<archive>https://ilias.hs-karlsruhe.de</archive>
+		</mailingList>
+	</mailingLists>
+
+	<issueManagement>
+		<system>JIRA</system>
+	</issueManagement>
+
+	<ciManagement>
+		<system>Jenkins</system>
+	</ciManagement>
 
 	<properties>
-		<surefire.argLine>-Xms256m -Xmx512m -XX:MaxPermSize=512m</surefire.argLine>
+		<surefire.argLine>-Xms256m -Xmx512m</surefire.argLine>
 		<findBugs.maxHeap>768</findBugs.maxHeap>
 		<javadoc.minmemory>128m</javadoc.minmemory>
 		<javadoc.maxmemory>1g</javadoc.maxmemory>
-
-		<!-- Klassen fuer Generierung des Metamodel gemaess JPA -->
-		<jpamodelgen.domainklassen>**/domain/*.java</jpamodelgen.domainklassen>
 		
-		<!-- Testklassen fuer JUnit -->
-		<testklassen>**/*Test.java</testklassen>
-		
-		<baseuri>http://localhost</baseuri>
-		<port>8080</port>
-		<basepath>/shop/rest</basepath>
-
-		<arquillian.managedOrRemote>managed</arquillian.managedOrRemote>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<compiler.sourceEncoding>ISO-8859-1</compiler.sourceEncoding>
+		
+		<!-- m2e-wtp settings -->
+		<m2e.jaxrs.activation>true</m2e.jaxrs.activation>
+		<m2e.jpa.activation>false</m2e.jpa.activation>
+		<m2e.jsf.activation>false</m2e.jsf.activation> 
+		
+		<!-- SWE: Testklassen fuer JUnit -->
+		<testklassen>**/*Test.java</testklassen>
+		
+		<!-- JZ: Tests mit Arquillian Graphene -->
+		<firefox.bin>C:\Program Files (x86)\Firefox\firefox.exe</firefox.bin>
+		<chrome.bin>C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</chrome.bin>
 				
-		<!-- Versionsnummern fuer verwendete Software -->
+		<!--
+			Versionsnummern fuer verwendete Software
+		-->
+		
+		<!-- Maven Embedded innerhalb von M2E -->
 		<maven.version>3.0.4</maven.version>
+		<!-- ShrinkWrap Resolver ist noch nicht kompatibel mit Maven 3.1 -->
+		<!-- https://issues.jboss.org/browse/SHRINKRES-144 -->
+		<maven-aether-provider.version>3.0.5</maven-aether-provider.version>
 		<java.version>1.7</java.version>
-		<java.minor.version>1.7.0-17</java.minor.version>
-		
-		<shrinkwrap-resolver-bom.version>2.0.0-beta-2</shrinkwrap-resolver-bom.version>
-		<shrinkwrap-bom.version>1.1.2</shrinkwrap-bom.version>
+		<!-- Eclipse und das WTP-Plugin koennen noch nicht 1.8 -->
 		<!--
-		<arquillian-bom.version>1.0.3.Final</arquillian-bom.version>
+		<java.version>1.8</java.version>
 		-->
-		
-		<jboss.version>7.2.0.Final</jboss.version>
-		
-		<hibernate-jpamodelgen.version>1.2.0.Final</hibernate-jpamodelgen.version>
-		<hibernate-validator.version>5.0.0.CR2</hibernate-validator.version>
-		<!--
-		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		-->
-		<hibernate-validator-annotation-processor.version>5.0.0.CR2</hibernate-validator-annotation-processor.version>
-		<!--
-		<hibernate-validator-annotation-processor.version>4.3.1.Final</hibernate-validator-annotation-processor.version>
-		-->
-		
-		<!--
-		<resteasy-bom.version>2.3.5.Final</resteasy-bom.version>
-		<resteasy-bom.version>3.0-beta-3</resteasy-bom.version>
-		-->
-		
-		<richfaces-bom.version>4.3.1.Final</richfaces-bom.version>
-		<atmosphere.version>1.0.12</atmosphere.version>
+		<java.minor.version>1.7.0-25</java.minor.version>
+		<windows.min.version>6.1</windows.min.version>
 
-		<picketbox.version>4.0.16.Final</picketbox.version>
-		<jboss-ejb3-ext-api.version>2.0.0</jboss-ejb3-ext-api.version>
+		<wildfly-spec-api.version>8.0.0.Beta1-SNAPSHOT</wildfly-spec-api.version>
+		<resteasy-bom.version>3.0.4.Final</resteasy-bom.version>
+		<hibernate-validator.version>5.1.0.Alpha1</hibernate-validator.version>
+		<hibernate-validator-annotation-processor.version>5.1.0.Alpha1</hibernate-validator-annotation-processor.version>
+		<hibernate-jpamodelgen.version>1.3.0.Final</hibernate-jpamodelgen.version>
+		<richfaces.version>5.0.0.Alpha1</richfaces.version>
+		<atmosphere.version>1.0.18</atmosphere.version>
+		<!--
+		<atmosphere.version>2.0.1</atmosphere.version>
+		-->
+		<picketbox.version>4.0.19.Final</picketbox.version>
 		
-		<javax.json.version>1.0-b06</javax.json.version>	
 		<junit.version>4.11</junit.version>
-		<rest-assured.version>1.7.2</rest-assured.version>
-		<httpclient.version>4.2.3</httpclient.version>
+		<fest-assert-core.version>2.0M10</fest-assert-core.version>
+		<shrinkwrap-resolver-bom.version>2.1.0-alpha-1</shrinkwrap-resolver-bom.version>
+		<shrinkwrap-bom.version>1.2.0</shrinkwrap-bom.version>
+		<arquillian-bom.version>1.1.1.Final</arquillian-bom.version>
+		<arquillian.managedOrRemote>remote</arquillian.managedOrRemote>
+		<!--
+		<arquillian.managedOrRemote>managed</arquillian.managedOrRemote>
+		-->
+		<arquillian-drone-bom.version>1.2.0.CR1</arquillian-drone-bom.version>
+		<graphene-webdriver.version>2.0.0.CR1</graphene-webdriver.version>
+		<batik.version>1.7</batik.version>
 		
-		<jboss-bom.version>1.0.5.CR2</jboss-bom.version>
-
 		<!-- Versionsnummern fuer Maven-Plugins -->
 		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-		<maven-enforcer-plugin.version>1.2</maven-enforcer-plugin.version>
-		<maven-war-plugin.version>2.3</maven-war-plugin.version>
+		<maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
+		<maven-war-plugin.version>2.4</maven-war-plugin.version>
 		<jboss-as-maven-plugin.version>7.4.Final</jboss-as-maven-plugin.version>
-		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+		<maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-jxr-plugin.version>2.3</maven-jxr-plugin.version>
-		<maven-surefire-plugin.version>2.14</maven-surefire-plugin.version>
-		<maven-surefire-report-plugin.version>2.14</maven-surefire-report-plugin.version>
-		<maven-project-info-reports-plugin.version>2.4</maven-project-info-reports-plugin.version>
+		<maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
+		<maven-surefire-report-plugin.version>${maven-surefire-plugin.version}</maven-surefire-report-plugin.version>
+		<maven-project-info-reports-plugin.version>2.7</maven-project-info-reports-plugin.version>
 		<taglist-maven-plugin.version>2.4</taglist-maven-plugin.version>
-		<maven-site-plugin.version>3.2</maven-site-plugin.version>
-		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-site-plugin.version>3.3</maven-site-plugin.version>
+		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
 		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
-		<versions-maven-plugin.version>1.3.1</versions-maven-plugin.version>
+		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
+		<maven-plugin-plugin.version>3.2</maven-plugin-plugin.version>
 		
 		<maven-clean-plugin.version>2.5</maven-clean-plugin.version>
-		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
+		<maven-deploy-plugin.version>2.8</maven-deploy-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-		<maven-install-plugin.version>2.4</maven-install-plugin.version>
+		<maven-install-plugin.version>2.5</maven-install-plugin.version>
 		<maven-resources-plugin.version>2.6</maven-resources-plugin.version>
-		<maven-dependency-plugin.version>2.7</maven-dependency-plugin.version>
+		<maven-dependency-plugin.version>2.8</maven-dependency-plugin.version>
 	</properties>
 	
 	<!-- Repositories, aus denen die benoetigte Software heruntergeladen werden kann -->
@@ -282,6 +239,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
 			<dependency>
 				<groupId>org.jboss.shrinkwrap</groupId>
 				<artifactId>shrinkwrap-bom</artifactId>
@@ -290,7 +248,6 @@
 				<scope>import</scope>
 			</dependency>
 			
-			<!--
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
@@ -298,9 +255,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			-->
 			
-			<!--
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-bom</artifactId>
@@ -308,44 +263,22 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			-->
-			
+            
 			<dependency>
-				<groupId>org.richfaces</groupId>
-				<artifactId>richfaces-bom</artifactId>
-				<version>${richfaces-bom.version}</version>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-spec-api</artifactId>
+				<version>${wildfly-spec-api.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			
 			<dependency>
-				<groupId>org.jboss.bom</groupId>
-				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
-				<version>${jboss-bom.version}</version>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-drone-bom</artifactId>
+				<version>${arquillian-drone-bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-            </dependency>
-			<dependency>
-				<groupId>org.jboss.bom</groupId>
-				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-				<version>${jboss-bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-            </dependency>
-			<dependency>
-				<groupId>org.jboss.bom</groupId>
-				<artifactId>jboss-javaee-6.0-with-resteasy</artifactId>
-				<version>${jboss-bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-            </dependency>
-			<dependency>
-				<groupId>org.jboss.bom</groupId>
-				<artifactId>jboss-javaee-6.0-with-richfaces</artifactId>
-				<version>${jboss-bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-            </dependency>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -353,37 +286,30 @@
 		Verwendete Software in Form von .jar-Dateien: notwendig fuer Uebersetzung und zur Laufzeit
 	-->
 	<dependencies>
-		<dependency>
-			<groupId>org.jboss.as</groupId>
-			<artifactId>jboss-as-arquillian-container-${arquillian.managedOrRemote}</artifactId>
-			<version>${jboss.version}</version>
-			<scope>test</scope>
-		</dependency>
+	
+		<!-- ========================================================================================= -->
+		<!-- J P A ,   S T A T I C   M E T A M O D E L L                                               -->
+		<!-- ========================================================================================= -->
 		
 		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>test</scope>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
+		<!--
 		<dependency>
-			<groupId>org.jboss.shrinkwrap</groupId>
-			<artifactId>shrinkwrap-impl-base</artifactId>
-			<scope>test</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>${hibernate-jpamodelgen.version}</version>
+			<scope>provided</scope>
 		</dependency>
+		-->
 
-		<dependency>
-			<groupId>org.jboss.shrinkwrap.resolver</groupId>
-			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!-- ========================================================================================= -->
+		<!-- B e a n   V a l i d a t i o n ,   H i b e r n a t e   V a l i d a t o r                   -->
+		<!-- ========================================================================================= -->
 		
-		<dependency>
-			<groupId>org.jboss.shrinkwrap.descriptors</groupId>
-			<artifactId>shrinkwrap-descriptors-impl-jboss</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -397,93 +323,217 @@
 			<scope>provided</scope>
 		</dependency>
 				
+		<!-- http://docs.jboss.org/hibernate/stable/validator/reference/en-US/html/validator-annotation-processor.html -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>${hibernate-validator-annotation-processor.version}</version>
+			<scope>provided</scope>
+		</dependency>	
+		
+		<!-- ========================================================================================= -->
+		<!-- J A X B                                                                                   -->
+		<!-- ========================================================================================= -->
+		
+		<dependency>
+			<groupId>org.jboss.spec.javax.xml.bind</groupId>
+			<artifactId>jboss-jaxb-api_2.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- ========================================================================================= -->
+		<!-- C D I                                                                                    -->
+		<!-- ========================================================================================= -->
+
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- ========================================================================================= -->
+		<!-- C o m m o n   A n n o t a t i o n s                                                       -->
+		<!-- ========================================================================================= -->
+		
 		<dependency>
-			<groupId>org.jboss.spec.javax.ejb</groupId>
-			<artifactId>jboss-ejb-api_3.1_spec</artifactId>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+  			<artifactId>jboss-annotations-api_1.2_spec</artifactId>
+			<scope>provided</scope>
+  		</dependency>
+		
+		<!-- ========================================================================================= -->
+		<!-- I n t e r c e p t o r s                                                                   -->
+		<!-- ========================================================================================= -->
+		
+		<dependency>
+			<groupId>org.jboss.spec.javax.interceptor</groupId>
+			<artifactId>jboss-interceptors-api_1.2_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- ========================================================================================= -->
+		<!-- J B o s s   L o g g i n g                                                                 -->
+		<!-- ========================================================================================= -->
+		
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- ========================================================================================= -->
+		<!-- J T A                                                                                     -->
+		<!-- ========================================================================================= -->
+		
+		<dependency>
+			<groupId>org.jboss.spec.javax.transaction</groupId>
+			<artifactId>jboss-transaction-api_1.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>		
+		
+		<!-- ========================================================================================= -->
+		<!-- J a v a M a i l                                                                           -->
+		<!-- ========================================================================================= -->
+
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- ========================================================================================= -->
+		<!-- C o n c u r r e n c y   U t i l i t i e s                                                 -->
+		<!-- ========================================================================================= -->
+
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
+			<groupId>org.jboss.spec.javax.enterprise.concurrent</groupId>
+			<artifactId>jboss-concurrency-api_1.0_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- ========================================================================================= -->
+		<!-- E J B                                                                                     -->
+		<!-- ========================================================================================= -->
+		
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
-		<!-- http://docs.jboss.org/hibernate/stable/validator/reference/en-US/html/validator-annotation-processor.html -->
+		<!-- @org.jboss.ejb3.annotation.SecurityDomain -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>${hibernate-validator-annotation-processor.version}</version><!--$NO-MVN-MAN-VER$-->
-			<scope>compile</scope>
-		</dependency>	
+			<groupId>org.jboss.ejb3</groupId>
+			<artifactId>jboss-ejb3-ext-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- ========================================================================================= -->
+		<!-- J A X - R S ,   R E S T E a s y ,   J a c k s o n                                         -->
+		<!-- ========================================================================================= -->
 		
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>jaxrs-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- @Wrapped, @Cache -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<scope>provided</scope>
+			
+			<exclusions>
+				<!-- In WildFly ist ein aktuelleres slf4j 1.7 -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+				<!-- In WildFly ist ein aktuelleres javassist -->
+				<exclusion>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!--
+		<dependency>
+			<groupId>org.jboss.spec.javax.ws.rs</groupId>
+			<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+			<version>1.0.0.Alpha1</version>
+			<scope>provided</scope>
+		</dependency>
+		-->
 
 	    <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
 			<scope>provided</scope>
+			
+			<!-- Jackson 2.x statt 1.x
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-xc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+			</exclusions>
+			-->
 		</dependency>
 		
-		<!-- Base64 fuer KundeController und fuer REST-Tests -->
+		<!-- Jackson 2.x statt 1.x
+	    <dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		-->
+		
+		<!-- ViolationReport und ResteasyConstraintViolation -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-validator-provider-11</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- @Formatted -->
 	    <dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-	    <dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.spec.javax.transaction</groupId>
-			<artifactId>jboss-transaction-api_1.1_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>		
+		
+		<!-- ========================================================================================= -->
+		<!-- S e r v l e t ,   J S F ,    E L ,   R i c h F a c e s ,   A t m o s p h e r e            -->
+		<!-- ========================================================================================= -->
 		
 		<dependency>
-			<groupId>org.jboss.arquillian.protocol</groupId>
-			<artifactId>arquillian-protocol-servlet</artifactId>
-			<scope>test</scope>
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.jboss.spec.javax.faces</groupId>
-			<artifactId>jboss-jsf-api_2.1_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.jboss.spec.javax.servlet</groupId>
-			<artifactId>jboss-servlet-api_3.0_spec</artifactId>
-			<!--
-			<version>1.0.0.Final</version>
-			-->
+			<artifactId>jboss-jsf-api_2.2_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		
@@ -494,28 +544,27 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.richfaces.core</groupId>
-			<artifactId>richfaces-core-impl</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.richfaces.ui</groupId>
-			<artifactId>richfaces-components-ui</artifactId>
+			<groupId>org.richfaces</groupId>
+			<artifactId>richfaces</artifactId>
+			<version>${richfaces.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
-			<version>${atmosphere.version}</version><!--$NO-MVN-MAN-VER$-->
+			<version>${atmosphere.version}</version>
+			<exclusions>
+				<!-- In WildFly ist ein aktuelleres slf4j -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
-		<!-- org.jboss.ejb3.annotation.SecurityDomain -->
-		<dependency>
-			<groupId>org.jboss.ejb3</groupId>
-			<artifactId>jboss-ejb3-ext-api</artifactId>
-			<version>${jboss-ejb3-ext-api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+		<!-- ========================================================================================= -->
+		<!-- S e c u r i t y                                                                           -->
+		<!-- ========================================================================================= -->
 		
 		<dependency>
 			<groupId>org.jboss.spec.javax.security.jacc</groupId>
@@ -531,26 +580,57 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<!--
 		<dependency>
 			<groupId>org.picketbox</groupId>
 			<artifactId>jbosssx-client</artifactId>
 			<version>${picketbox.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		-->
 		
+		<!--
 		<dependency>
 			<groupId>org.picketbox</groupId>
 			<artifactId>jboss-security-spi</artifactId>
 			<version>${picketbox.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		-->
 				
-		<!-- org.jboss.as.controller.client.ModelControllerClient und org.jboss.dmr.ModelNode -->
+		<!-- org.wildfly.controller.client.ModelControllerClient und org.jboss.dmr.ModelNode; dmr = Detyped Model Representation -->
 		<dependency>
-			<groupId>org.jboss.as</groupId>
-			<artifactId>jboss-as-controller-client</artifactId>
-			<version>${jboss.version}</version>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-controller-client</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		
+		<!-- ========================================================================================= -->
+		<!-- J A X - W S                                                                               -->
+		<!-- ========================================================================================= -->
+		
+		<dependency>
+			<groupId>org.jboss.spec.javax.xml.ws</groupId>
+			<artifactId>jboss-jaxws-api_2.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jboss.ws</groupId>
+			<artifactId>jbossws-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	
+	
+		<!-- ========================================================================================= -->
+		<!-- T e s t e n                                                                               -->
+		<!-- ========================================================================================= -->
+
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert-core</artifactId>
+			<version>${fest-assert-core.version}</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
@@ -561,27 +641,85 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.jayway.restassured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${rest-assured.version}</version>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<!-- https://github.com/shrinkwrap/resolver/blob/master/README.asciidoc -->
+			<artifactId>shrinkwrap-resolver-depchain</artifactId>
+			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-aether-provider</artifactId>
+			<version>${maven-aether-provider.version}</version><!--$NO-MVN-MAN-VER$-->
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.plexus</groupId>
+					<artifactId>plexus-component-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.plexus</groupId>
+					<artifactId>plexus-utils</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.shrinkwrap</groupId>
+			<artifactId>shrinkwrap-impl-base</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-arquillian-container-${arquillian.managedOrRemote}</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.arquillian.protocol</groupId>
+			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+	    <dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version><!--$NO-MVN-MAN-VER$-->
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>${javax.json.version}</version>
+			<groupId>org.jboss.arquillian.graphene</groupId>
+			<artifactId>graphene-webdriver</artifactId>
+			<version>${graphene-webdriver.version}</version>
+			<type>pom</type>
 			<scope>test</scope>
-		</dependency>	
+		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-ext</artifactId>
+			<version>${batik.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	
+	<prerequisites>
+		<maven>${maven.version}</maven>
+	</prerequisites>
+
 	<build>
 		<defaultGoal>test-compile</defaultGoal>
 		
@@ -641,6 +779,9 @@
 							<property>env.JBOSS_HOME</property>
 							<message>"JBOSS_HOME muss fuer die Arquillian-Tests gesetzt sein"</message>
 						</requireProperty>
+						<requireOS>
+							<family>windows</family>
+						</requireOS>
 						<requirePluginVersions/>
 						
 						<!--
@@ -659,6 +800,37 @@
 				</executions>
 			</plugin>
 			
+			<!-- Generierung der Metamodel-Klassen (fuer Criteria Queries) -->
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>${maven-processor-plugin.version}</version>
+
+				<configuration>
+					<processors>
+						<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+					</processors>
+				</configuration>
+		
+				<executions>
+					<execution>
+						<id>generate-metamodel-classes</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>process</goal>
+						</goals>
+					</execution>
+				</executions>
+				
+				<dependencies>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-jpamodelgen</artifactId>
+						<version>${hibernate-jpamodelgen.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -669,6 +841,8 @@
 					<target>${java.version}</target>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
+					<!-- org.bsc.maven:maven-processor-plugin -->
+					<compilerArgument>-proc:none</compilerArgument>
 					<!--
 					<compilerArgument>-Xlint:all</compilerArgument>
 					-->
@@ -680,6 +854,8 @@
 				<!-- http://in.relation.to/12805.lace -->
 				<!-- https://community.jboss.org/en/tools/blog/2012/05/20/annotation-processing-support-in-m2e-or-m2e-apt-100-is-out -->
 				<!-- http://relation.to/Bloggers/AMoreConciseWayToGenerateTheJPA2MetamodelInMaven -->
+				<!-- target/generated-sources/annotations -->
+				<!--
 				<dependencies>
 					<dependency>
 						<groupId>org.hibernate</groupId>
@@ -688,6 +864,7 @@
 						<scope>compile</scope>
 					</dependency>
 				</dependencies>
+				-->
 			</plugin>
 			
 			<plugin>
@@ -695,30 +872,13 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${maven-war-plugin.version}</version>
 				<configuration>
-					<!-- Maven erwartet web.xml: im Gegensatz zu Java EE 6 -->
+					<!-- Maven erwartet web.xml: im Gegensatz zu Java EE ab Version 6 -->
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<archive>
 						<manifestEntries>
 							<Dependencies>org.jboss.as.controller-client,org.jboss.dmr</Dependencies>
 						</manifestEntries>
 					</archive>
-					<webResources>
-						<resource>
-							<directory>src/main/resources</directory>
-							<excludes>
-								<exclude>META-INF</exclude>
-								<exclude>sql</exclude>
-								<exclude>ValidationMessages*.properties</exclude>
-								<exclude>de</exclude>
-							</excludes>
-						</resource>
-					</webResources>
-					<!-- von WEB-INF/lib ausschliessen -->
-					<packagingExcludes>
-						WEB-INF/lib/hibernate-validator-*.jar,
-						WEB-INF/lib/jsr305-*.jar,
-						WEB-INF/lib/slf4j-*.jar
-					</packagingExcludes>
 				</configuration>
 			</plugin>
 			
@@ -730,12 +890,15 @@
 				
 				<configuration>
 					<argLine>${surefire.argLine}</argLine>
-					<systemPropertyVariables>
+					<systemProperties>
 						<java.util.logging.config.file>${basedir}\src\test\resources\logging.properties</java.util.logging.config.file>
-						<baseuri>${baseuri}</baseuri>
-						<port>${port}</port>
-						<basepath>${basepath}</basepath>
-					</systemPropertyVariables>
+						<java.awt.headless>true</java.awt.headless>
+						<webdriver.firefox.bin>${firefox.bin}</webdriver.firefox.bin>
+						<webdriver.chrome.driver>${chrome.bin}</webdriver.chrome.driver>
+						<!--
+						<arquillian.launch>${arquillian.launch}</arquillian.launch>
+						-->
+					</systemProperties>
 					<runOrder>alphabetical</runOrder>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<trimStackTrace>false</trimStackTrace>
@@ -771,6 +934,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven-project-info-reports-plugin.version}</version>
+				<!--
+				<configuration>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				-->
 			</plugin>
 
 			<plugin>
@@ -815,7 +983,7 @@
 				<configuration>
 					<configLocation>${basedir}/src/test/resources/checkstyle.xml</configLocation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<excludes>**/UAgentInfo.java</excludes>
+					<excludes>**/UAgentInfo.java,**/gen/*.java</excludes>
 					<violationSeverity>warning</violationSeverity>
 				</configuration>
 			</plugin>
@@ -865,6 +1033,8 @@
 								<minmemory>${javadoc.minmemory}</minmemory>
 								<maxmemory>${javadoc.maxmemory}</maxmemory>
 								
+								<excludePackageNames>de.shop.kundenverwaltung.soap.gen</excludePackageNames>
+								
 								<!-- Javadoc mit externen Quellen verknuepfen (dauert sehr lange!) -->
 								<!--
 								<linksource>true</linksource>
@@ -876,8 +1046,8 @@
 								-->
 								
 								<packagesheader>Packages des Webshops</packagesheader>
-								<doctitle>Softwarearchitektur: Version ${project.version}</doctitle>
-								<windowtitle>Softwarearchitektur: Version ${project.version}</windowtitle>
+								<doctitle>${project.name}: Version ${project.version}</doctitle>
+								<windowtitle>${project.name}: Version ${project.version}</windowtitle>
 								<bottom>Copyright &#169; ${project.inceptionYear}-${currentYear} Hochschule Karlsruhe - Informatik und Wirtschaftsinformatik. All Rights Reserved.</bottom>
 								
 								<outputName>Surefire Bericht</outputName>
@@ -915,7 +1085,8 @@
 								</tagListOptions>
 							</configuration>
 						</plugin>
-				
+						
+						<!-- FindBugs funktioniert nicht mit Java 8 -->
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>findbugs-maven-plugin</artifactId>
@@ -948,6 +1119,7 @@
 								</rulesets>
 								<excludes>
 									<exclude>**/UAgentInfo.java</exclude>
+									<exclude>**/gen/*.java</exclude>
 								</excludes>
 							</configuration>
 						</plugin>
@@ -960,7 +1132,7 @@
 							<configuration>
 								<configLocation>${basedir}/src/test/resources/checkstyle.xml</configLocation>
 								<includeTestSourceDirectory>true</includeTestSourceDirectory>
-								<excludes>**/UAgentInfo.java</excludes>
+								<excludes>**/UAgentInfo.java,**/gen/*.java</excludes>
 								<violationSeverity>warning</violationSeverity>
 							</configuration>
 						</plugin>
@@ -969,6 +1141,12 @@
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>versions-maven-plugin</artifactId>
 							<version>${versions-maven-plugin.version}</version>
+						</plugin>
+						
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-plugin-plugin</artifactId>
+							<version>${maven-plugin-plugin.version}</version>
 						</plugin>
 					</reportPlugins>
 				</configuration>
@@ -1021,12 +1199,38 @@
 					<exclude>findbugs.xml</exclude>
 					<exclude>checkstyle.xml</exclude>
 					<exclude>pmd.xml</exclude>
-					<exclude>hibernate.console.properties</exclude>
 					<exclude>jboss-deployment-structure.xml</exclude>
+					<exclude>hibernate.console.properties</exclude>
 					<exclude>rest/*</exclude>
 					<exclude>logging.properties</exclude>
 				</excludes>
 			</testResource>
 		</testResources>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>arq-jbossas-remote</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>openshift</id>
+			<build>
+				<plugins>
+					<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven-war-plugin.version}</version>
+					<configuration>
+						<outputDirectory>deployments</outputDirectory>
+						<warName>ROOT</warName>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

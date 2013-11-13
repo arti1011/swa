@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
@@ -34,16 +36,13 @@ import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
 import de.shop.kundenverwaltung.service.KundeService;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
 
 @Path("/bestellungen")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class BestellungResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -126,6 +125,7 @@ public class BestellungResource {
 	
 	@POST
 	@Consumes(APPLICATION_JSON)
+	@Transactional
 	@Produces
 	public Response createBestellung(Bestellung bestellung) {
 		// Schluessel des Kunden extrahieren
