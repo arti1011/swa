@@ -24,7 +24,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.util.IdGroup;
+
 
 @Entity
 @Table(name = "bestellposition")

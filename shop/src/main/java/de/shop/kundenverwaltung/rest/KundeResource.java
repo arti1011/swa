@@ -35,16 +35,15 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
+import javax.transaction.Transactional;
 
 @Path("/kunden")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class KundeResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -165,6 +164,7 @@ public class KundeResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
+	@Transactional
 	public Response createKunde(AbstractKunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 
@@ -193,6 +193,7 @@ public class KundeResource {
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
+	@Transactional
 	public void updateKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Adresse adresse = kunde.getAdresse();
@@ -231,6 +232,7 @@ public class KundeResource {
 	@Path("{id:[0-9]+}")
 	@DELETE
 	@Produces
+	@Transactional
 	public void deleteKunde(@PathParam("id") Long kundeId) {
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE, locale);

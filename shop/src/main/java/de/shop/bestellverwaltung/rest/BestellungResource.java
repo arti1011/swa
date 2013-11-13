@@ -34,16 +34,15 @@ import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
 import de.shop.kundenverwaltung.service.KundeService;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
+import javax.transaction.Transactional;
 
 @Path("/bestellungen")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class BestellungResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -127,6 +126,7 @@ public class BestellungResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
+	@Transactional
 	public Response createBestellung(Bestellung bestellung) {
 		// Schluessel des Kunden extrahieren
 		final String kundeUriStr = bestellung.getKundeUri().toString();
