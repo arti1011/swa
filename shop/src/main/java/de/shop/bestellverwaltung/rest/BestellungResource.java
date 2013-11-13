@@ -23,7 +23,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
@@ -35,8 +34,10 @@ import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
 import de.shop.kundenverwaltung.service.KundeService;
+
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
+import javax.transaction.Transactional;
 
 
 @Path("/bestellungen")

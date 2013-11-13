@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Locale;
 
 import javax.enterprise.context.RequestScoped;
-import javax.transaction.Transactional;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,8 +35,11 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
+
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
+import javax.transaction.Transactional;
+
 
 @Path("/kunden")
 @Produces(APPLICATION_JSON)

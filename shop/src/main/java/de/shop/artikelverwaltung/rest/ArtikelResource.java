@@ -28,12 +28,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
-
+import javax.transaction.Transactional;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
+
 
 @Path("/artikel")
 @Produces(APPLICATION_JSON)
