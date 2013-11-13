@@ -26,7 +26,7 @@ import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.service.KundeService;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.ValidatorProvider;
 
 @Log

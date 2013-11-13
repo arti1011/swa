@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.service.InvalidBestellungException;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 
 
 @Provider
