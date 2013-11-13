@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -80,27 +79,25 @@ public class BestellungService implements Serializable {
 	}
 	
 	public Bestellung createBestellung(Bestellung bestellung,
-            Long kundeId,
-            Locale locale) {
+            Long kundeId) {
 		if (bestellung == null) {
 			return null;
 		}
 
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		final AbstractKunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN, locale);
-		return createBestellung(bestellung, kunde, locale);
+		final AbstractKunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN);
+		return createBestellung(bestellung, kunde);
 	}
 	
 	public Bestellung createBestellung(Bestellung bestellung,
-            AbstractKunde kunde,
-            Locale locale) {
+            AbstractKunde kunde) {
 		if (bestellung == null) {
 			return null;
 		}
 
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
 		if (!em.contains(kunde)) {
-			kunde = ks.findKundeById(kunde.getId(), KundeService.FetchType.MIT_BESTELLUNGEN, locale);
+			kunde = ks.findKundeById(kunde.getId(), KundeService.FetchType.MIT_BESTELLUNGEN);
 		}
 		kunde.addBestellung(bestellung);
 		bestellung.setKunde(kunde);
