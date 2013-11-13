@@ -25,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
@@ -38,8 +39,6 @@ import de.shop.kundenverwaltung.service.KundeService.FetchType;
 
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import javax.transaction.Transactional;
-
 
 @Path("/kunden")
 @Produces(APPLICATION_JSON)
@@ -162,6 +161,7 @@ public class KundeResource {
 	 * @param kunde neuer Kunde
 	 * @return Response-Objekt mit URL des neuen Kunden
 	 */
+	
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -191,6 +191,7 @@ public class KundeResource {
 	 * Mit der URL /kunden einen Kunden per PUT aktualisieren
 	 * @param kunde zu aktualisierende Daten des Kunden
 	 */
+
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -230,6 +231,7 @@ public class KundeResource {
 	 * Mit der URL /kunden{id} einen Kunden per DELETE l&ouml;schen
 	 * @param kundeId des zu l&ouml;schenden Kunden
 	 */
+
 	@Path("{id:[0-9]+}")
 	@DELETE
 	@Produces
