@@ -26,15 +26,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
-import javax.transaction.Transactional;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 
 import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-
 
 @Path("/artikel")
 @Produces(APPLICATION_JSON)
@@ -100,7 +99,7 @@ public class ArtikelResource {
 		}		
 		return artikelliste;
 	}
-	
+
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -114,7 +113,7 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -139,7 +138,7 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+
 	@DELETE
 	@Path("{id:[1-9][0-9]*}")
 	@Produces
