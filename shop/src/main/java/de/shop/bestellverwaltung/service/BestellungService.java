@@ -86,7 +86,9 @@ public class BestellungService implements Serializable {
 
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
 		final AbstractKunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN);
+
 		return createBestellung(bestellung, kunde);
+		
 	}
 	
 	public Bestellung createBestellung(Bestellung bestellung,
