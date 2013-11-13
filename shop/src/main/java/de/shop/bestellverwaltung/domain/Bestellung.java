@@ -14,10 +14,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -25,26 +28,27 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jboss.logging.Logger;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
-import de.shop.util.IdGroup;
-import de.shop.util.PreExistingGroup;
 
 @Entity
-@Table(name = "bestellung")
+@Table(indexes = { @Index(columnList = "kunde_fk"), @Index(columnList = "erzeugt")})
 @NamedQueries({
 	@NamedQuery(name  = Bestellung.FIND_BESTELLUNGEN_BY_KUNDE,
                 query = "SELECT b"
@@ -55,6 +59,8 @@ import de.shop.util.PreExistingGroup;
                         + " FROM   Bestellung b"
   			            + " WHERE  b.id = :" + Bestellung.PARAM_ID)
 })
+@Cacheable
+@XmlRootElement
 public class Bestellung implements Serializable {
 	
 	private static final long serialVersionUID = 1618359234119003714L;
@@ -70,13 +76,16 @@ public class Bestellung implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
-	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
+	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}")
 	private Long id;
+	
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)
-	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}", groups = PreExistingGroup.class)
-	@JsonIgnore
+	@XmlTransient
 	private AbstractKunde kunde;
 	
 	private boolean ausgeliefert;
@@ -91,14 +100,14 @@ public class Bestellung implements Serializable {
 	@Valid
 	private List<Bestellposition> bestellpositionen;
 	
-	@Column(nullable = false)
+	@Basic(optional = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlElement(name = "datum")
 	private Date erzeugt;
 
-	@Column(nullable = false)
+	@Basic(optional = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 	
 	public Bestellung() {
@@ -126,11 +135,22 @@ public class Bestellung implements Serializable {
 		aktualisiert = new Date();
 	}
 	
+	@PostUpdate
+	private void postUpdate() {
+		LOGGER.debugf("Bestellung mit ID=%d aktualisiert: version=%d", id, version);
+	}
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	public boolean isAusgeliefert() {
 		return ausgeliefert;
@@ -195,6 +215,7 @@ public class Bestellung implements Serializable {
 		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
 	}
 
+	//FIXME hasCode() evt. wie in Beispiel um version erweitern
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -230,10 +251,11 @@ public class Bestellung implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert
-				+ ", kunde=" + kunde + ", kundeUri=" + kundeUri
-				+ ", bestellpositionen=" + bestellpositionen + ", erzeugt="
-				+ erzeugt + ", aktualisiert=" + aktualisiert + "]";
+		return "Bestellung [id=" + id + ", version=" + version + ", kunde="
+				+ kunde + ", ausgeliefert=" + ausgeliefert + ", kundeUri="
+				+ kundeUri + ", bestellpositionen=" + bestellpositionen
+				+ ", erzeugt=" + erzeugt + ", aktualisiert=" + aktualisiert
+				+ "]";
 	}
 
 }
