@@ -25,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
@@ -35,16 +36,13 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
 
 @Path("/kunden")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class KundeResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -162,6 +160,7 @@ public class KundeResource {
 	 * @param kunde neuer Kunde
 	 * @return Response-Objekt mit URL des neuen Kunden
 	 */
+	@Transactional
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -190,6 +189,7 @@ public class KundeResource {
 	 * Mit der URL /kunden einen Kunden per PUT aktualisieren
 	 * @param kunde zu aktualisierende Daten des Kunden
 	 */
+	@Transactional
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -228,6 +228,7 @@ public class KundeResource {
 	 * Mit der URL /kunden{id} einen Kunden per DELETE l&ouml;schen
 	 * @param kundeId des zu l&ouml;schenden Kunden
 	 */
+	@Transactional
 	@Path("{id:[0-9]+}")
 	@DELETE
 	@Produces

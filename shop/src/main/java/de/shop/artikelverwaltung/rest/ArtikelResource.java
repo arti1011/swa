@@ -25,21 +25,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.transaction.Transactional;
 
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
-import de.shop.util.LocaleHelper;
-import de.shop.util.Log;
+import de.shop.util.interceptor.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
 
 @Path("/artikel")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class ArtikelResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -100,7 +98,7 @@ public class ArtikelResource {
 		}		
 		return artikelliste;
 	}
-	
+	@Transactional
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -113,7 +111,7 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+	@Transactional
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -137,7 +135,7 @@ public class ArtikelResource {
 		
 		return Response.noContent().build();
 	}
-	
+	@Transactional
 	@DELETE
 	@Path("{id:[1-9][0-9]*}")
 	@Produces

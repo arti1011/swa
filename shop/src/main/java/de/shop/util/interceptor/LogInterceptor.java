@@ -1,4 +1,4 @@
-package de.shop.util;
+package de.shop.util.interceptor;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,6 +14,7 @@ import org.jboss.logging.Logger;
  * Interceptor zum Tracing von public-Methoden der CDI-faehigen Beans und der Session Beans.
  * Sowohl der Methodenaufruf als auch der Rueckgabewert (nicht: Exception) werden mit
  * Level DEBUG protokolliert.
+ * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Interceptor
 @Log
@@ -22,8 +23,7 @@ public class LogInterceptor implements Serializable {
 	
 	private static final String COUNT = "Anzahl = ";
 	private static final int MAX_ELEM = 4;  // bei Collections wird ab 5 Elementen nur die Anzahl ausgegeben
-	private static final int CHAR_POST_AFTER_GET_SET = 3; // getX..., setX...
-	private static final int CHAR_POST_AFTER_IS = 2; // isX...
+	private static final int CHAR_POS_AFTER_IS = 2; // isX...
 
 	@AroundInvoke
 	public Object log(InvocationContext ctx) throws Exception {
@@ -39,15 +39,10 @@ public class LogInterceptor implements Serializable {
 
 		final String methodName = ctx.getMethod().getName();
 
-		// getXy, setXy, isXy und toString nicht protokollieren
-		if ((methodName.startsWith("get") || methodName.startsWith("set"))
-			&& Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_GET_SET))) {
+		if ((methodName.startsWith("is")) && Character.isUpperCase(methodName.charAt(CHAR_POS_AFTER_IS))) {
 			return ctx.proceed();
 		}
-		if ((methodName.startsWith("is")) && Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_IS))) {
-			return ctx.proceed();
-		}
-		if (("toString".equals(methodName)) && Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_IS))) {
+		if (("toString".equals(methodName)) && Character.isUpperCase(methodName.charAt(CHAR_POS_AFTER_IS))) {
 			return ctx.proceed();
 		}
 		
