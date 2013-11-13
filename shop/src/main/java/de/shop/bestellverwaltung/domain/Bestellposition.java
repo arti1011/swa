@@ -53,7 +53,7 @@ public class Bestellposition implements Serializable {
 	
 	@Column(nullable = false)
 	@Min(value = ANZAHL_MIN, message = "{bestellposition.anzahl.min}")
-	private short anzahl;
+	private Long anzahl;
 	
 	@ManyToOne
 	@JoinColumn(name = "artikel_fk", nullable = false)
@@ -72,10 +72,9 @@ public class Bestellposition implements Serializable {
 	public Bestellposition(Artikel artikel) {
 		super();
 		this.artikel = artikel;
-		this.anzahl = 1;
 	}
 	
-	public Bestellposition(Artikel artikel, short anzahl) {
+	public Bestellposition(Artikel artikel, Long anzahl) {
 		super();
 		this.artikel = artikel;
 		this.anzahl = anzahl;
@@ -107,13 +106,6 @@ public class Bestellposition implements Serializable {
 		this.version = version;
 	}
 
-	public short getAnzahl() {
-		return anzahl;
-	}
-	public void setAnzahl(short anzahl) {
-		this.anzahl = anzahl;
-	}
-	
 	public Artikel getArtikel() {
 		return artikel;
 	}
@@ -129,11 +121,19 @@ public class Bestellposition implements Serializable {
 		this.artikelUri = artikelUri;
 	}
 
+	public Long getAnzahl() {
+		return anzahl;
+	}
+
+	public void setAnzahl(Long anzahl) {
+		this.anzahl = anzahl;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + anzahl;
+		result = prime * result;
 		result = prime * result + ((artikel == null) ? 0 : artikel.hashCode());
 		return result;
 	}

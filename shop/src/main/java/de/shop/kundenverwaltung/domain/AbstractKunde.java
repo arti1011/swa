@@ -84,12 +84,13 @@ import de.shop.util.persistence.File;
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN,
                 query = "SELECT  k"
 				        + " FROM AbstractKunde k"),
+	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN_FETCH_BESTELLUNGEN,
+				query = "SELECT  DISTINCT k"
+						+ " FROM AbstractKunde k LEFT JOIN FETCH k.bestellungen"),
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN_ORDER_BY_ID,
 		        query = "SELECT   k"
 				        + " FROM  AbstractKunde k"
 		                + " ORDER BY k.id"),
-
-
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN_BY_NACHNAME,
 	            query = "SELECT   k"
 				        + " FROM  AbstractKunde k"
@@ -163,6 +164,7 @@ public abstract class AbstractKunde implements Serializable, Cloneable {
 	
 	private static final String PREFIX = "AbstractKunde.";
 	public static final String FIND_KUNDEN = PREFIX + "findKunden";
+	public static final String FIND_KUNDEN_FETCH_BESTELLUNGEN = PREFIX + "findKundenFetchBestellungen";
 	public static final String FIND_KUNDEN_ORDER_BY_ID = PREFIX + "findKundenOrderById";
 	public static final String FIND_IDS_BY_PREFIX = PREFIX + "findIdsByIdPrefix";
 	public static final String FIND_KUNDEN_BY_ID_PREFIX = PREFIX + "findKundenByIdPrefix";

@@ -16,7 +16,6 @@ import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
 
-import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
@@ -108,7 +107,7 @@ public class BestellungService implements Serializable {
 		// IDs koennten einen Wert != null haben, wenn sie durch einen Web Service uebertragen wurden
 		bestellung.setId(KEINE_ID);
 		for (Bestellposition bp : bestellung.getBestellpositionen()) {
-			bp.setPositionId(KEINE_ID);
+			bp.setId(KEINE_ID);
 			LOGGER.tracef("Bestellposition: %s", bp);				
 		}
 
@@ -118,11 +117,12 @@ public class BestellungService implements Serializable {
 		return bestellung;
 	}
 	
-	public List<Artikel> ladenhueter(int anzahl) {
-		final List<Artikel> artikel = em.createNamedQuery(Bestellposition.FIND_LADENHUETER, Artikel.class)
-				                        .setMaxResults(anzahl)
-				                        .getResultList();
-		return artikel;
-	}
+	//FIXME methode evtl löschen
+//	public List<Artikel> ladenhueter(int anzahl) {
+//		final List<Artikel> artikel = em.createNamedQuery(Bestellposition.FIND_LADENHUETER, Artikel.class)
+//				                        .setMaxResults(anzahl)
+//				                        .getResultList();
+//		return artikel;
+//	}
 	
 }
