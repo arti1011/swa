@@ -6,7 +6,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -15,9 +14,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
@@ -27,7 +23,6 @@ import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.interceptor.Log;
-import de.shop.util.ValidatorProvider;
 
 @Log
 public class BestellungService implements Serializable {
@@ -45,9 +40,6 @@ public class BestellungService implements Serializable {
 	
 	@Inject
 	private KundeService ks;
-	
-	@Inject
-	private ValidatorProvider validatorProvider;
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -121,7 +113,6 @@ public class BestellungService implements Serializable {
 			LOGGER.tracef("Bestellposition: %s", bp);				
 		}
 
-		validateBestellung(bestellung, locale, Default.class);
 		em.persist(bestellung);
 		event.fire(bestellung);
 
@@ -133,16 +124,6 @@ public class BestellungService implements Serializable {
 				                        .setMaxResults(anzahl)
 				                        .getResultList();
 		return artikel;
-	}
-	
-	private void validateBestellung(Bestellung bestellung, Locale locale, Class<?>... groups) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<Bestellung>> violations = validator.validate(bestellung);
-		if (violations != null && !violations.isEmpty()) {
-			LOGGER.debugf("createBestellung: violations=%s", violations);
-			throw new InvalidBestellungException(bestellung, violations);
-		}
 	}
 	
 }
