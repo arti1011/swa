@@ -22,7 +22,9 @@ public final class TestConstants {
 
 	// Pfade und Pfad-Parameter
 	public static final String KUNDEN_URI = BASE_URI + "/kunden";
-	public static final String KUNDEN_ID_PATH_PARAM ="kundenId";
+	
+	//FIXME hier habe ich auch kundenId kundeId gemacht
+	public static final String KUNDEN_ID_PATH_PARAM ="kundeId";
 	public static final String KUNDEN_ID_URI = KUNDEN_URI + "/{" + KUNDEN_ID_PATH_PARAM + "}";
 	public static final String KUNDEN_ID_FILE_URI = KUNDEN_ID_URI + "/file";
 	

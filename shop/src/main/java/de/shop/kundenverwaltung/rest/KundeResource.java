@@ -71,10 +71,10 @@ public class KundeResource {
 	
 	// public fuer Testklassen
 	public static final String KUNDEN_ID_PATH_PARAM = "kundeId";
+	public static final String KUNDEN_FETCHTYPE_PARAM = "kundenFetchType";
 	public static final String KUNDEN_NACHNAME_QUERY_PARAM = "nachname";
 	public static final String KUNDEN_PLZ_QUERY_PARAM = "plz";
 	public static final String KUNDEN_EMAIL_QUERY_PARAM = "email";
-	public static final String KUNDEN_GESCHLECHT_QUERY_PARAM = "geschlecht";
 	
 	private static final String NOT_FOUND_ID = "kunde.notFound.id";
 	private static final String NOT_FOUND_NACHNAME = "kunde.notFound.nachname";
@@ -115,7 +115,8 @@ public class KundeResource {
 	@GET
 	@Path("{" + KUNDEN_ID_PATH_PARAM + ":[1-9][0-9]*}")
 	public Response findKundeById(@PathParam(KUNDEN_ID_PATH_PARAM) Long id) {
-		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE);
+		
+		final AbstractKunde kunde = ks.findKundeById(id, FetchType.MIT_BESTELLUNGEN);
 		if (kunde == null) {
 			throw new NotFoundException(NOT_FOUND_ID, id);
 		}
