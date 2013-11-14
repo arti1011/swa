@@ -189,6 +189,17 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		return kunde;
 	}
 	
+	public AbstractKunde findKundeByUserName(String userName) {
+		try {
+			return em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_USERNAME, AbstractKunde.class)
+					 .setParameter(AbstractKunde.PARAM_KUNDE_USERNAME, userName)
+					 .getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+	
 	public <T extends AbstractKunde> T createKunde(T kunde) {
 		if (kunde == null) {
 			return kunde;

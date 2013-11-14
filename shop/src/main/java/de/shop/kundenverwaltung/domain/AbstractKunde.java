@@ -84,6 +84,14 @@ import de.shop.util.persistence.File;
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN,
                 query = "SELECT  k"
 				        + " FROM AbstractKunde k"),
+	@NamedQuery(name  = AbstractKunde.FIND_KUNDE_BY_USERNAME,
+			    query = "SELECT   k"
+						+ " FROM  AbstractKunde k"
+			            + " WHERE CONCAT('', k.id) = :" + AbstractKunde.PARAM_KUNDE_USERNAME),
+	@NamedQuery(name  = AbstractKunde.FIND_USERNAME_BY_USERNAME_PREFIX,
+		  	    query = "SELECT   CONCAT('', k.id)"
+		  				+ " FROM  AbstractKunde k"
+		   	            + " WHERE CONCAT('', k.id) LIKE :" + AbstractKunde.PARAM_USERNAME_PREFIX),
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN_FETCH_BESTELLUNGEN,
 				query = "SELECT  DISTINCT k"
 						+ " FROM AbstractKunde k LEFT JOIN FETCH k.bestellungen"),

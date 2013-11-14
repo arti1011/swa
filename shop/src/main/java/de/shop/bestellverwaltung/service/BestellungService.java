@@ -77,13 +77,13 @@ public class BestellungService implements Serializable {
 	}
 	
 	public Bestellung createBestellung(Bestellung bestellung,
-            Long kundeId) {
+            String username) {
 		if (bestellung == null) {
 			return null;
 		}
 
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		final AbstractKunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN);
+		final AbstractKunde kunde = ks.findKundeByUserName(username);
 
 		return createBestellung(bestellung, kunde);
 		
