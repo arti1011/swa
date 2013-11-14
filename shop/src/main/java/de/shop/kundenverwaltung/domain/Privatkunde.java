@@ -15,8 +15,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,12 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Inheritance
 @DiscriminatorValue(PRIVATKUNDE)
-@NamedQueries({
-	@NamedQuery(name  = Privatkunde.FIND_BY_GESCHLECHT,
-                query = "SELECT  k"
-				        + " FROM Privatkunde k"
-                		+ " WHERE k.geschlecht = :" + Privatkunde.PARAM_GESCHLECHT)
-})
 @Cacheable
 @XmlRootElement
 public class Privatkunde extends AbstractKunde {
