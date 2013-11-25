@@ -48,4 +48,5 @@ public class JaxRsLogFilter implements ContainerRequestFilter, ContainerResponse
 		LOGGER.debugf("Status Info: %d %s", responseCtx.getStatus(), responseCtx.getStatusInfo());
 		LOGGER.debugf("Location: %s", responseCtx.getLocation());		
 	}
+	
 }

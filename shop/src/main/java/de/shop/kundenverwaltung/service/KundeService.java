@@ -136,7 +136,7 @@ public class KundeService implements Serializable {
 				catch (NoResultException e) {
 					kunde = null;
 				}
-				// FIXME https://hibernate.atlassian.net/browse/HHH-8285 : @NamedEntityGraph ab Java EE 7 bzw. JPA 2.1
+				
 				//kunde = em.find(AbstractKunde.class, id, GRAPH_BESTELLUNGEN);
 				break;
 
@@ -170,24 +170,6 @@ public class KundeService implements Serializable {
 				break;
 		}
 		
-		// FIXME https://hibernate.atlassian.net/browse/HHH-8285 : @NamedEntityGraph ab Java EE 7 bzw. JPA 2.1
-				//final TypedQuery<AbstractKunde> query = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME,
-				//                                                            AbstractKunde.class)
-				//				                          .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname);
-				//switch (fetch) {
-				//	case NUR_KUNDE:
-				//		break;
-				//	case MIT_BESTELLUNGEN:
-				//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_BESTELLUNGEN);
-				//		break;
-				//	case MIT_WARTUNGSVERTRAEGEN:
-				//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_WARTUNGSVERTRAEGE);
-				//		break;
-				//	default:
-				//		break;
-				//}
-				//
-				//final List<AbstractKunde> kunden = query.getResultList();
 		return kunden;
 	}
 	

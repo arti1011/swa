@@ -74,6 +74,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
     	// Konkurrierendes Update
 		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
 		kunde.setNachname(neuerNachname2);
+		kunde.setPasswordWdh(kunde.getPassword());
 		
 		final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
 			@Override

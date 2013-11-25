@@ -111,6 +111,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
 		final AbstractKunde kunde = ks.findKundeByUserName(username);
+		kunde.setPasswordWdh(kunde.getPassword());
 		return createBestellung(bestellung, kunde);
 	}
 	

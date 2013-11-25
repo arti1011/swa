@@ -449,11 +449,11 @@ public class KundeResourceTest extends AbstractResourceTest {
 		assertThat(violation.getValue()).isEqualTo(email);
 		
 		
-		violation = filter(violations).with("message")
-                                      .equalsTo("Passwords are not equal.").get().iterator().next();
-		// @ScriptAssert steht bei der Klasse und nicht bei einem Attribut:
-		// violation.getValue() ruft toString() auf dem Objekt der Klasse Privatkunde auf
-		assertThat(violation.getValue()).contains(password).contains(passwordWdh);
+//		violation = filter(violations).with("message")
+//                                      .equalsTo("Passwords are not equal.").get().iterator().next();
+//		// @ScriptAssert steht bei der Klasse und nicht bei einem Attribut:
+//		// violation.getValue() ruft toString() auf dem Objekt der Klasse Privatkunde auf
+//		assertThat(violation.getValue()).contains(password).contains(passwordWdh);
 		
 		
 		violation = filter(violations).with("message")
@@ -508,6 +508,7 @@ public class KundeResourceTest extends AbstractResourceTest {
             // Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
             // Nachnamen bauen
             kunde.setNachname(neuerNachname);
+            kunde.setPasswordWdh(kunde.getPassword());
 
             response = getHttpsClient(USERNAME_MITARBEITER, PASSWORD_MITARBEITER)
             				.target(KUNDEN_URI).request().accept(APPLICATION_JSON)
