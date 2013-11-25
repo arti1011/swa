@@ -110,12 +110,13 @@ public class ArtikelResource {
                               .rel(SELF_LINK)
                               .build();
 
-		return new Link[] { self };
+		return new Link[] {self };
 	}
 	
 	@GET
 	public Response findArtikelBySuchbegriff(@QueryParam(ARTIKEL_BEZEICHNUNG_QUERY_PARAM) 
-								@Pattern(regexp = Artikel.BEZEICHNUNG_PATTERN, message = "{artikelverwaltung.artikel.bezeichnung.pattern}")
+							   @Pattern(regexp = Artikel.BEZEICHNUNG_PATTERN, 
+							   message = "{artikelverwaltung.artikel.bezeichnung.pattern}")
 	                           String bezeichnung) {
 		List<Artikel> artikelliste = null;
 		// TODO Mehrere Query-Parameter koennen angegeben sein
@@ -206,6 +207,6 @@ public class ArtikelResource {
                               .rel(LAST_LINK)
                               .build();
 		
-		return new Link[] { first, last };
+		return new Link[] {first, last };
 	}
 }

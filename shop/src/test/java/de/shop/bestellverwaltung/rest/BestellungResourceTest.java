@@ -105,7 +105,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("BEGINN createBestellungOK");
 		
 		// Given
-		final Artikel artikel11 = ARTIKEL_STUHL;
+		final Long artikelId1 = ARTIKEL_STUHL;
 		final Long artikelId2 = ARTIKEL_DOPPELBETT;
 				
 		final Bestellung bestellung = new Bestellung();
@@ -188,10 +188,5 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE createBestellungKundeNotLoggedIn");
 	}
 	
-	//TODO:		createBestellungNotOK				(400_BAD_REQUEST)
-	@Test
-	@InSequence(6)
-	public void createBestellungNotOkNoPos() {
-		
-	}
+
 }

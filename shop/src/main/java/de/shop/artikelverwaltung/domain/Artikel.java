@@ -67,7 +67,7 @@ import org.jboss.logging.Logger;
 
 @Cacheable
 @XmlRootElement
-public class Artikel implements Serializable {
+public class Artikel implements Serializable, Cloneable {
 
 private static final long serialVersionUID = 1472129607838538329L;
 private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());

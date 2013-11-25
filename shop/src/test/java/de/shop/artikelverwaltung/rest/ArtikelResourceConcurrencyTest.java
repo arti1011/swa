@@ -38,7 +38,7 @@ public class ArtikelResourceConcurrencyTest extends AbstractResourceTest {
 
         private static final Long ARTIKEL_ID_UPDATE = Long.valueOf(301);
         private static final String NEUE_BEZEICHNUNG = "Regal";
-        private static final String NEUE_BEZEICHNUNG_2 = "Regal2";
+        private static final String NEUE_BEZEICHNUNG_2 = "Hochregal";
 
         @Test
         @InSequence(1)
@@ -50,7 +50,8 @@ public class ArtikelResourceConcurrencyTest extends AbstractResourceTest {
                 final String neueBezeichnung2 = NEUE_BEZEICHNUNG_2;
 
                 Response response = getHttpsClient().target(ARTIKEL_ID_URI)
-                                .resolveTemplate(ArtikelResource.ARTIKEL_ID_PATH_PARAM, artikelId).request().accept(APPLICATION_JSON)
+                                .resolveTemplate(ArtikelResource.ARTIKEL_ID_PATH_PARAM, 
+                                		artikelId).request().accept(APPLICATION_JSON)
                                 .get();
 
                 final Artikel artikel = response.readEntity(Artikel.class);
@@ -60,14 +61,17 @@ public class ArtikelResourceConcurrencyTest extends AbstractResourceTest {
                 final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
                         @Override
                         public Integer call() {
-                                final Response response = new HttpsConcurrencyHelper().getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN)
-                                                .target(ARTIKEL_URI).request().accept(APPLICATION_JSON).put(json(artikel));
+                                final Response response = new HttpsConcurrencyHelper()
+                                .getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN)
+                                .target(ARTIKEL_URI).request()
+                                .accept(APPLICATION_JSON).put(json(artikel));
                                 final int status = response.getStatus();
                                 response.close();
                                 return Integer.valueOf(status);
                         }
                 };
-                final Integer status = Executors.newSingleThreadExecutor().submit(concurrentUpdate).get(TIMEOUT, SECONDS);
+                final Integer status = Executors.newSingleThreadExecutor()
+                								.submit(concurrentUpdate).get(TIMEOUT, SECONDS);
                 assertThat(status.intValue()).isEqualTo(HTTP_OK);
 
                 artikel.setBezeichnung(neueBezeichnung);

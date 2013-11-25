@@ -37,12 +37,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.artikelverwaltung.rest.ArtikelResource;
 import de.shop.util.AbstractResourceTest;
 
 
 @RunWith(Arquillian.class)
-public class ArtikelResourceTest extends AbstractResourceTest{
+public class ArtikelResourceTest extends AbstractResourceTest {
 private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 	
 	private static final Long ARTIKEL_ID_VORHANDEN = Long.valueOf(300);
@@ -113,7 +112,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		final String bezeichnung = BEZEICHNUNG_VORHANDEN;
 
 		// When
-		Response response = getHttpsClient().target(ARTIKEL_URI)
+		final Response response = getHttpsClient().target(ARTIKEL_URI)
                                             .queryParam(ArtikelResource.ARTIKEL_BEZEICHNUNG_QUERY_PARAM, bezeichnung)
                                             .request()
                                             .accept(APPLICATION_JSON)
@@ -153,7 +152,8 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		// When
 		final Response response = getHttpsClient().target(ARTIKEL_URI)
-                                                  .queryParam(ArtikelResource.ARTIKEL_BEZEICHNUNG_QUERY_PARAM, bezeichnung)
+                                                  .queryParam(ArtikelResource.
+                                                		  ARTIKEL_BEZEICHNUNG_QUERY_PARAM, bezeichnung)
                                                   .request()
                                                   .acceptLanguage(GERMAN)
                                                   .get();
@@ -167,7 +167,9 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 	}
 	
 	
-	//TODO gescheite Exception-Mapper für Constraint-Violations damit sie gut abgeprüft werden können. Momentan übernimmt DefaulExceptionMapper von Jürgen Zimmermann
+	/*TODO gescheite Exception-Mapper für Constraint-Violations damit sie gut abgeprüft werden können.
+			Momentan übernimmt DefaulExceptionMapper von Jürgen Zimmermann
+			*/
 	@Ignore
 	@Test
 	@InSequence(22)
@@ -179,7 +181,8 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		// When
 		final Response response = getHttpsClient().target(ARTIKEL_URI)
-                                                  .queryParam(ArtikelResource.ARTIKEL_BEZEICHNUNG_QUERY_PARAM, bezeichnung)
+                                                  .queryParam(ArtikelResource.
+                                                		  ARTIKEL_BEZEICHNUNG_QUERY_PARAM, bezeichnung)
                                                   .request()
                                                   .accept(APPLICATION_JSON)
                                                   .acceptLanguage(GERMAN)
@@ -194,7 +197,9 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		final ResteasyConstraintViolation violation =
 				                          filter(violations).with("message")
-                                                            .equalsTo("A description have to start with exactly one capital letter followed by lower letters.")
+                                                            .equalsTo("A description have to start"
+                                                            		+ " with exactly one capital letter "
+                                                            		+ "followed by lower letters.")
                                                             .get()
                                                             .iterator()
                                                             .next();
@@ -226,7 +231,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
-		String location = response.getLocation().toString();
+		final String location = response.getLocation().toString();
 		response.close();
 
 		final int startPos = location.lastIndexOf('/');
@@ -237,7 +242,8 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		LOGGER.finer("ENDE");
 	}
 	
-	//TODO gescheiten Exception-Mapper für Constraint-Violations. Momentan übernimmt Default-Exception Mapper von Jürgen Zimmermann.
+	/*TODO gescheiten Exception-Mapper für Constraint-Violations. 
+	Momentan übernimmt Default-Exception Mapper von Jürgen Zimmermann.*/
 	
 	@Test
 	@InSequence(41)
@@ -284,7 +290,8 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
             final String neueBezeichnung = NEUE_BEZEICHNUNG_UPDATE;
 
             Response response = getHttpsClient().target(ARTIKEL_ID_URI)
-                            .resolveTemplate(ArtikelResource.ARTIKEL_ID_PATH_PARAM, artikelId).request().accept(APPLICATION_JSON)
+                            .resolveTemplate(ArtikelResource.ARTIKEL_ID_PATH_PARAM, 
+                            		artikelId).request().accept(APPLICATION_JSON)
                             .get();
             final Artikel artikel = response.readEntity(Artikel.class);
             assertThat(artikel.getId()).isEqualTo(artikelId);
