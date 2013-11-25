@@ -1,7 +1,10 @@
 package de.shop.kundenverwaltung.service;
 
+import static de.shop.util.Constants.MAX_AUTOCOMPLETE;
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -24,39 +28,42 @@ import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import de.shop.auth.domain.RolleType;
 import de.shop.auth.service.AuthService;
-import de.shop.bestellverwaltung.domain.Bestellposition;
-import de.shop.bestellverwaltung.domain.Bestellposition_;
+import de.shop.bestellverwaltung.domain.Bestellposten;
+import de.shop.bestellverwaltung.domain.Bestellposten_;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.AbstractKunde_;
+import de.shop.util.NoMimeTypeException;
 import de.shop.util.interceptor.Log;
 import de.shop.util.persistence.ConcurrentDeletedException;
 import de.shop.util.persistence.File;
 import de.shop.util.persistence.FileHelper;
 import de.shop.util.persistence.MimeType;
-import de.shop.util.NoMimeTypeException;
 
+
+@Dependent
 @Log
 public class KundeService implements Serializable {
-	private static final long serialVersionUID = 3188789767052580247L;
+	private static final long serialVersionUID = -5520738420154763865L;
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
 	public enum FetchType {
 		NUR_KUNDE,
-		MIT_BESTELLUNGEN
+		MIT_BESTELLUNGEN,
+		MIT_WARTUNGSVERTRAEGEN
 	}
 	
 	public enum OrderByType {
 		UNORDERED,
 		ID
 	}
-private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
-	// genau 1 Eintrag mit 100 % Fuellgrad
 	private static final Map<String, Object> GRAPH_BESTELLUNGEN = new HashMap<>(1, 1);
 	
 	static {
@@ -89,6 +96,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
 
+
 	public List<AbstractKunde> findAllKunden(FetchType fetch, OrderByType order) {
 		final TypedQuery<AbstractKunde> query = OrderByType.ID.equals(order)
 				                        ? em.createNamedQuery(AbstractKunde.FIND_KUNDEN_ORDER_BY_ID,
@@ -106,56 +114,6 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		final List<AbstractKunde> kunden = query.getResultList();
 		return kunden;
-	}
-	
-	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch) {
-		List<AbstractKunde> kunden;
-		switch (fetch) {
-			case NUR_KUNDE:
-				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME, AbstractKunde.class)
-						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
-                           .getResultList();
-				break;
-			
-			case MIT_BESTELLUNGEN:
-				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME_FETCH_BESTELLUNGEN,
-						                     AbstractKunde.class)
-						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
-                           .getResultList();
-				break;
-
-			default:
-				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME, AbstractKunde.class)
-						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
-                           .getResultList();
-				break;
-		}
-		
-		// FIXME https://hibernate.atlassian.net/browse/HHH-8285 : @NamedEntityGraph ab Java EE 7 bzw. JPA 2.1
-		//final TypedQuery<AbstractKunde> query = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME,
-		//                                                            AbstractKunde.class)
-		//				                          .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname);
-		//switch (fetch) {
-		//	case NUR_KUNDE:
-		//		break;
-		//	case MIT_BESTELLUNGEN:
-		//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_BESTELLUNGEN);
-		//		break;
-		//	case MIT_WARTUNGSVERTRAEGEN:
-		//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_WARTUNGSVERTRAEGE);
-		//		break;
-		//	default:
-		//		break;
-		//}
-		//
-		//final List<AbstractKunde> kunden = query.getResultList();
-		return kunden;
-	}
-	
-	public List<String> findNachnamenByPrefix(String nachnamePrefix) {
-		return em.createNamedQuery(AbstractKunde.FIND_NACHNAMEN_BY_PREFIX, String.class)
-				 .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME_PREFIX, nachnamePrefix + '%')
-				 .getResultList();
 	}
 	
 	public AbstractKunde findKundeById(Long id, FetchType fetch) {
@@ -188,6 +146,125 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		}
 		return kunde;
 	}
+
+	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch) {
+		List<AbstractKunde> kunden;
+		switch (fetch) {
+			case NUR_KUNDE:
+				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME, AbstractKunde.class)
+						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
+						   .getResultList();
+				break;
+			
+			case MIT_BESTELLUNGEN:
+				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME_FETCH_BESTELLUNGEN,
+						                     AbstractKunde.class)
+						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
+						   .getResultList();
+				break;
+
+			default:
+				kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME, AbstractKunde.class)
+						   .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname)
+						   .getResultList();
+				break;
+		}
+		
+		// FIXME https://hibernate.atlassian.net/browse/HHH-8285 : @NamedEntityGraph ab Java EE 7 bzw. JPA 2.1
+				//final TypedQuery<AbstractKunde> query = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_NACHNAME,
+				//                                                            AbstractKunde.class)
+				//				                          .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME, nachname);
+				//switch (fetch) {
+				//	case NUR_KUNDE:
+				//		break;
+				//	case MIT_BESTELLUNGEN:
+				//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_BESTELLUNGEN);
+				//		break;
+				//	case MIT_WARTUNGSVERTRAEGEN:
+				//		query.setHint("javax.persistence.loadgraph", AbstractKunde.GRAPH_WARTUNGSVERTRAEGE);
+				//		break;
+				//	default:
+				//		break;
+				//}
+				//
+				//final List<AbstractKunde> kunden = query.getResultList();
+		return kunden;
+	}
+	
+	
+	public List<String> findNachnamenByPrefix(String nachnamePrefix) {
+		final List<String> nachnamen = em.createNamedQuery(AbstractKunde.FIND_NACHNAMEN_BY_PREFIX,
+				                                           String.class)
+				                         .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME_PREFIX, nachnamePrefix + '%')
+				                         .setMaxResults(MAX_AUTOCOMPLETE)
+				                         .getResultList();
+		return nachnamen;
+	}
+	
+	public List<Long> findIdsByPrefix(String idPrefix) {
+		if (Strings.isNullOrEmpty(idPrefix)) {
+			return Collections.emptyList();
+		}
+		final List<Long> ids = em.createNamedQuery(AbstractKunde.FIND_IDS_BY_PREFIX, Long.class)
+				                 .setParameter(AbstractKunde.PARAM_KUNDE_ID_PREFIX, idPrefix + '%')
+				                 .getResultList();
+		return ids;
+	}
+	
+
+	public List<AbstractKunde> findKundenByIdPrefix(Long id) {
+		if (id == null) {
+			return Collections.emptyList();
+		}
+		
+		return em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_ID_PREFIX, AbstractKunde.class)
+				 .setParameter(AbstractKunde.PARAM_KUNDE_ID_PREFIX, id.toString() + '%')
+				 .setMaxResults(MAX_AUTOCOMPLETE)
+				 .getResultList();
+	}
+
+
+	
+
+	public AbstractKunde findKundeByEmail(String email) {
+		AbstractKunde kunde;
+		try {
+			kunde = em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_EMAIL, AbstractKunde.class)
+					                      .setParameter(AbstractKunde.PARAM_KUNDE_EMAIL, email)
+					                      .getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+		
+		return kunde;
+	}
+	
+
+	
+	public List<AbstractKunde> findKundenByPLZ(String plz) {
+		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_PLZ, AbstractKunde.class)
+                                             .setParameter(AbstractKunde.PARAM_KUNDE_ADRESSE_PLZ, plz)
+                                             .getResultList();
+		return kunden;
+	}
+
+	/**
+	 */
+	public List<AbstractKunde> findKundenBySeit(Date seit) {
+		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_DATE, AbstractKunde.class)
+                                             .setParameter(AbstractKunde.PARAM_KUNDE_SEIT, seit)
+                                             .getResultList();
+		return kunden;
+	}
+	
+	
+	public List<AbstractKunde> findPrivatkundenFirmenkunden() {
+		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_PRIVATKUNDEN_FIRMENKUNDEN,
+                                                               AbstractKunde.class)
+                                             .getResultList();
+		return kunden;
+	}
 	
 	public AbstractKunde findKundeByUserName(String userName) {
 		try {
@@ -200,6 +277,65 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		}
 	}
 	
+	/**
+	 */
+	public List<AbstractKunde> findKundenByNachnameCriteria(String nachname) {
+		final CriteriaBuilder builder = em.getCriteriaBuilder();
+		final CriteriaQuery<AbstractKunde> criteriaQuery = builder.createQuery(AbstractKunde.class);
+		final Root<AbstractKunde> k = criteriaQuery.from(AbstractKunde.class);
+
+		final Path<String> nachnamePath = k.get(AbstractKunde_.nachname);
+		//final Path<String> nachnamePath = k.get("nachname");
+		
+		final Predicate pred = builder.equal(nachnamePath, nachname);
+		criteriaQuery.where(pred);
+
+		// Ausgabe des komponierten Query-Strings. Voraussetzung: das Modul "org.hibernate" ist aktiviert
+		//if (LOGGER.isLoggable(FINEST)) {
+		//	query.unwrap(org.hibernate.Query.class).getQueryString();
+		//}
+		
+		final List<AbstractKunde> kunden = em.createQuery(criteriaQuery).getResultList();
+		return kunden;
+	}
+	
+	/**
+	 */
+	public List<AbstractKunde> findKundenMitMinBestMenge(short minMenge) {
+		final CriteriaBuilder builder = em.getCriteriaBuilder();
+		final CriteriaQuery<AbstractKunde> criteriaQuery  = builder.createQuery(AbstractKunde.class);
+		final Root<AbstractKunde> k = criteriaQuery.from(AbstractKunde.class);
+
+		final Join<AbstractKunde, Bestellung> b = k.join(AbstractKunde_.bestellungen);
+		final Join<Bestellung, Bestellposten> bp = b.join(Bestellung_.bestellposten);
+		criteriaQuery.where(builder.gt(bp.<Short>get(Bestellposten_.anzahl), minMenge))
+		             .distinct(true);
+		
+		final List<AbstractKunde> kunden = em.createQuery(criteriaQuery).getResultList();
+		return kunden;
+	}
+	
+
+
+	private static boolean hasBestellungen(AbstractKunde kunde) {
+		LOGGER.debugf("hasBestellungen BEGINN: %s", kunde);
+		
+		boolean result = false;
+		
+		// Gibt es den Kunden und hat er mehr als eine Bestellung?
+		// Bestellungen nachladen wegen Hibernate-Caching
+		if (kunde != null && kunde.getBestellungen() != null && !kunde.getBestellungen().isEmpty()) {
+			result = true;
+		}
+		
+		LOGGER.debugf("hasBestellungen ENDE: %s", result);
+		return result;
+	}
+	/**
+	 * Einen neuen Kunden anlegen
+	 * @param kunde Der neue Kunde
+	 * @return Der neue Kunde einschliesslich generierter ID
+	 */
 	public <T extends AbstractKunde> T createKunde(T kunde) {
 		if (kunde == null) {
 			return kunde;
@@ -222,7 +358,14 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		return kunde;
 	}
-	
+
+
+	/**
+	 * Einen vorhandenen Kunden aktualisieren
+	 * @param kunde Der aktualisierte Kunde
+	 * @param geaendertPassword Wurde das Passwort aktualisiert und muss es deshalb verschluesselt werden?
+	 * @return Der aktualisierte Kunde
+	 */
 	public <T extends AbstractKunde> T updateKunde(T kunde, boolean geaendertPassword) {
 		if (kunde == null) {
 			return null;
@@ -258,21 +401,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		
 		return kunde;
 	}
-	
-	public AbstractKunde findKundeByEmail(String email) {
-		AbstractKunde kunde;
-		try {
-			kunde = em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_EMAIL, AbstractKunde.class)
-					  .setParameter(AbstractKunde.PARAM_KUNDE_EMAIL, email)
-					  .getSingleResult();
-		}
-		catch (NoResultException e) {
-			return null;
-		}
-		
-		return kunde;
-	}
-	
+
 	/**
 	 * Einen Kunden in der DB loeschen.
 	 * @param kunde Der zu loeschende Kunde
@@ -304,87 +433,7 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 		// Kundendaten loeschen
 		em.remove(kunde);
 	}
-	
-	public List<AbstractKunde> findKundenByPLZ(String plz) {
-		return em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_PLZ, AbstractKunde.class)
-				 .setParameter(AbstractKunde.PARAM_KUNDE_ADRESSE_PLZ, plz)
-				 .getResultList();
-	}
-	
-	public List<AbstractKunde> findKundenBySeit(Date seit) {
-		return em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_DATE, AbstractKunde.class)
-				 .setParameter(AbstractKunde.PARAM_KUNDE_SEIT, seit)
-				 .getResultList();
-	}
-	
-	public List<AbstractKunde> findPrivatkundenFirmenkunden() {
-		return em.createNamedQuery(AbstractKunde.FIND_PRIVATKUNDEN_FIRMENKUNDEN, AbstractKunde.class)
-				 .getResultList();
-	}
-	
-	public List<AbstractKunde> findKundenByNachnameCriteria(String nachname) {
-		// SELECT k
-		// FROM   AbstractKunde k
-		// WHERE  k.nachname = ?
-				
-		final CriteriaBuilder builder = em.getCriteriaBuilder();
-		final CriteriaQuery<AbstractKunde> criteriaQuery = builder.createQuery(AbstractKunde.class);
-		final Root<AbstractKunde> k = criteriaQuery.from(AbstractKunde.class);
 
-		final Path<String> nachnamePath = k.get(AbstractKunde_.nachname);
-		
-		final Predicate pred = builder.equal(nachnamePath, nachname);
-		criteriaQuery.where(pred);
-
-		final List<AbstractKunde> kunden = em.createQuery(criteriaQuery).getResultList();
-		return kunden;
-	}
-	
-	public List<AbstractKunde> findKundenMitMinBestMenge(short minMenge) {
-		// SELECT DISTINCT k
-		// FROM   AbstractKunde k
-		//        JOIN k.bestellungen b
-		//        JOIN b.bestellpositionen bp
-		// WHERE  bp.anzahl >= ?
-		
-		final CriteriaBuilder builder = em.getCriteriaBuilder();
-		final CriteriaQuery<AbstractKunde> criteriaQuery  = builder.createQuery(AbstractKunde.class);
-		final Root<AbstractKunde> k = criteriaQuery.from(AbstractKunde.class);
-
-		final Join<AbstractKunde, Bestellung> b = k.join(AbstractKunde_.bestellungen);
-		final Join<Bestellung, Bestellposition> bp = b.join(Bestellung_.bestellpositionen);
-		criteriaQuery.where(builder.gt(bp.<Long>get(Bestellposition_.anzahl), minMenge))
-		             .distinct(true);
-		
-		return em.createQuery(criteriaQuery).getResultList();
-	}
-	
-	private static boolean hasBestellungen(AbstractKunde kunde) {
-		LOGGER.debugf("hasBestellungen BEGINN: %s", kunde);
-		
-		boolean result = false;
-		
-		// Gibt es den Kunden und hat er mehr als eine Bestellung?
-		// Bestellungen nachladen wegen Hibernate-Caching
-		if (kunde != null && kunde.getBestellungen() != null && !kunde.getBestellungen().isEmpty()) {
-			result = true;
-		}
-		
-		LOGGER.debugf("hasBestellungen ENDE: %s", result);
-		return result;
-	}
-
-	
-	private void passwordVerschluesseln(AbstractKunde kunde) {
-		LOGGER.debugf("passwordVerschluesseln BEGINN: %s", kunde);
-
-		final String unverschluesselt = kunde.getPassword();
-		final String verschluesselt = authService.verschluesseln(unverschluesselt);
-		kunde.setPassword(verschluesselt);
-		kunde.setPasswordWdh(verschluesselt);
-
-		LOGGER.debugf("passwordVerschluesseln ENDE: %s", verschluesselt);
-	}
 	
 	/**
 	 * Einem Kunden eine hochgeladene Datei ohne MIME Type (bei RESTful WS) zuordnen
@@ -443,6 +492,17 @@ private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().loo
 			}
 		};
 		managedExecutorService.execute(storeFile);
+	}
+	
+	private void passwordVerschluesseln(AbstractKunde kunde) {
+		LOGGER.debugf("passwordVerschluesseln BEGINN: %s", kunde);
+
+		final String unverschluesselt = kunde.getPassword();
+		final String verschluesselt = authService.verschluesseln(unverschluesselt);
+		kunde.setPassword(verschluesselt);
+		kunde.setPasswordWdh(verschluesselt);
+
+		LOGGER.debugf("passwordVerschluesseln ENDE: %s", verschluesselt);
 	}
 	
 }

@@ -59,6 +59,7 @@ public class AuthService implements Serializable {
 	
 	@Inject
 	private transient EntityManager em;
+
 	
 	@Inject
 	private KundeService ks;
@@ -137,7 +138,8 @@ public class AuthService implements Serializable {
 	/*
 	 * siehe http://community.jboss.org/thread/169263
 	 * siehe https://docs.jboss.org/author/display/AS7/Management+Clients
-	 * siehe https://github.com/jbossas/jboss-as/blob/master/controller-client/src/main/java/org/jboss/as/controller/client/ModelControllerClient.java
+	 * siehe https://github.com/jbossas/jboss-as/blob/master/controller-client
+	 * /src/main/java/org/jboss/as/controller/client/ModelControllerClient.java
 	 * siehe http://community.jboss.org/wiki/FormatOfADetypedOperationRequest
 	 * siehe http://community.jboss.org/wiki/DetypedDescriptionOfTheAS7ManagementModel
 	 * 

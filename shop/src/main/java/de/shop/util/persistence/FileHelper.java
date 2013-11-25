@@ -34,6 +34,8 @@ public class FileHelper implements Serializable {
 	private static final long serialVersionUID = 12904207356717310L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
+	private static final int TOLERANZ = 1000;
+	
 	// Zulaessige Extensionen fuer Upload mit einer Webseite
 	private String extensionen;
 	
@@ -135,7 +137,7 @@ public class FileHelper implements Serializable {
 			// Die Datei wurde beim Hochladen evtl. in einem parallelen Thread angelegt,
 			// der evtl. vor dem Abspeichern der Verwaltungsdaten in der DB fertig war.
 			// Als Zeitunterschied bzw. Toleranz sollten 1000 Millisekunden ausreichend sein.
-			if (creationTime + 1000 > file.getAktualisiert().getTime()) {
+			if (creationTime + TOLERANZ > file.getAktualisiert().getTime()) {
 				LOGGER.tracef("Die Datei %s existiert bereits", filename);
 				return;
 			}

@@ -18,20 +18,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
 @Entity
 @Inheritance
 @DiscriminatorValue(PRIVATKUNDE)
 @Cacheable
 @XmlRootElement
 public class Privatkunde extends AbstractKunde {
-	private static final long serialVersionUID = -1783340753647408724L;
+private static final long serialVersionUID = -1783340753647408724L;
 	
-	private static final String PREFIX = "Privatkunde.";
-	public static final String FIND_BY_GESCHLECHT = PREFIX + "findByGeschlecht";
-	public static final String PARAM_GESCHLECHT = "geschlecht";
 	
 	@ElementCollection(fetch = EAGER)
 	@CollectionTable(name = "kunde_hobby",
@@ -82,7 +76,8 @@ public class Privatkunde extends AbstractKunde {
 
 	@Override
 	public String toString() {
-		return "Privatkunde [" + super.toString() + ", hobbies=" + hobbies + "]";
+		return "Privatkunde [" + super.toString() 
+		        + ", hobbies=" + hobbies + "]";
 	}
 	
 	@Override
@@ -90,6 +85,7 @@ public class Privatkunde extends AbstractKunde {
 		// Fuer Validierung an der Benutzeroberflaeche
 		final Privatkunde neuesObjekt = Privatkunde.class.cast(super.clone());
 		
+
 		neuesObjekt.hobbies = hobbies;
 		
 		return neuesObjekt;
