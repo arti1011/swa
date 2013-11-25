@@ -44,7 +44,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	
 	private static final long TIMEOUT = 5;
 
-	private static final Long KUNDE_ID_UPDATE = Long.valueOf(6);
+	private static final Long KUNDE_ID_UPDATE = Long.valueOf(105);
 	private static final String NEUER_NACHNAME = "Testname";
 	private static final String NEUER_NACHNAME_2 = "Neuername";
 	//private static final Long KUNDE_ID_DELETE1 = Long.valueOf(5);

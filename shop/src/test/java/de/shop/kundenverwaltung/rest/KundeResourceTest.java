@@ -99,7 +99,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String IMAGE_PATH_UPLOAD = "src/test/resources/rest/" + IMAGE_FILENAME;
 	private static final String IMAGE_MIMETYPE = "image/png";
 	private static final String IMAGE_PATH_DOWNLOAD = "target/" + IMAGE_FILENAME;
-	private static final Long KUNDE_ID_UPLOAD = Long.valueOf(101);
+	private static final Long KUNDE_ID_UPLOAD = Long.valueOf(102);
 
 	private static final String IMAGE_INVALID = "image.bmp";
 	private static final String IMAGE_INVALID_PATH = "src/test/resources/rest/" + IMAGE_INVALID;

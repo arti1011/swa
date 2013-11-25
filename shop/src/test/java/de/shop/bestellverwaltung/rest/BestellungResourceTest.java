@@ -35,7 +35,6 @@ import org.junit.runner.RunWith;
 
 import de.shop.bestellverwaltung.domain.Bestellposten;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.StatusType;
 import de.shop.util.AbstractResourceTest;
 
 
@@ -106,7 +105,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("BEGINN createBestellungOK");
 		
 		// Given
-		final Long artikelId1 = ARTIKEL_STUHL;
+		final Artikel artikel11 = ARTIKEL_STUHL;
 		final Long artikelId2 = ARTIKEL_DOPPELBETT;
 				
 		final Bestellung bestellung = new Bestellung();
@@ -121,7 +120,6 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		bp1.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
 		bp1.setAnzahl((short) 1);
 		bestellung.addBestellposition(bp1);
-		bestellung.setStatus(StatusType.INBEARBEITUNG);
 		
 		
 		// When		
@@ -175,7 +173,6 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		bp1.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
 		bp1.setAnzahl((short) 1);
 		bestellung.addBestellposition(bp1);
-		bestellung.setStatus(StatusType.INBEARBEITUNG);
 				
 		// When		
 		final Response response = getHttpsClient().target(BESTELLUNGEN_URI)

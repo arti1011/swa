@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 
 
+
 //import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
 
@@ -82,14 +83,13 @@ public static final String FIND_ARTIKEL_BY_KAT = PREFIX + "findArtikelByKat";
 public static final String FIND_ARTIKEL_BY_KAT_AND_FAR = PREFIX + "findArtikelByKatAndFar";
 public static final String FIND_ARTIKEL_MAX_PREIS = PREFIX + "findArtikelByMaxPreis";
 public static final String PARAM_BEZEICHNUNG = "bezeichnung";
-public static final String PARAM_FARBE = "farbe";
 public static final String PARAM_PREIS = "preis";
 
 public static final String PARAM_ARTIKEL_BEZEICHNUNG = "bezeichnung";
 
 private static final int BEZEICHNUNG_LENGTH_MIN = 3;
 private static final int BEZEICHNUNG_LENGTH_MAX = 32;
-private static final String BEZEICHNUNG_PATTERN = NAME_PATTERN;
+public static final String BEZEICHNUNG_PATTERN = NAME_PATTERN;
 
 @Id
 @GeneratedValue
@@ -139,7 +139,7 @@ public void setValues(Artikel a) {
 	this.version = a.getVersion();
 }
 
-public Artikel(String bezeichnung, String farbe, BigDecimal preis) {
+public Artikel(String bezeichnung, BigDecimal preis) {
 	super();
 	this.bezeichnung = bezeichnung;
 	this.preis = preis;

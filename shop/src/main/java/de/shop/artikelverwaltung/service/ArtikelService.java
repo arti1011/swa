@@ -70,10 +70,6 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 
-	// public List<Artikel> findAllArtikel() {
-	// final List<Artikel> allArtikel = em.createNamedQuery(Artikel.class);
-	// return allArtikel;
-	// }
 
 	public List<Artikel> findArtikelByBezeichnung(String bezeichnung) {
 		if (Strings.isNullOrEmpty(bezeichnung)) {

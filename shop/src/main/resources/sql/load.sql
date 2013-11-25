@@ -133,13 +133,13 @@ INSERT INTO kunde_hobby (kunde_fk, hobby) VALUES (152,'L');
 
 
 
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (300,'Tisch ''Oval''',80,1,'01.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (301,'Stuhl ''Sitz bequem''',10,1,'02.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (302,'Tür ''Hoch und breit''',300,1,'03.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (303,'Fenster ''Glasklar''',150,1,'04.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (304,'Spiegel ''Mach mich schöner''',60,0,'05.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (305,'Kleiderschrank ''Viel Platz''',500,1,'06.08.2006 00:00:00',0,'01.08.2006 00:00:00');
-INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (306,'Bett ''Mit Holzwurm''',600,1,'07.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (300,'Tisch',80,1,'01.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (301,'Stuhl',10,1,'02.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (302,'Tür',300,1,'03.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (303,'Fenster',150,1,'04.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (304,'Spiegel',60,0,'05.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (305,'Kleiderschrank',500,1,'06.08.2006 00:00:00',0,'01.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, verfuegbar, aktualisiert, version, erstellt) VALUES (306,'Bett',600,1,'07.08.2006 00:00:00',0,'01.08.2006 00:00:00');
 
 
 INSERT INTO bestellung (id, kunde_fk, idx, erzeugt, aktualisiert, version) VALUES (400,101,1,'01.08.2006 00:00:00','01.08.2006 00:00:00',0);
