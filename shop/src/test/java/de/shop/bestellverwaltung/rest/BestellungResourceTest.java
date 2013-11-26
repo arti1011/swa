@@ -1,23 +1,30 @@
 package de.shop.bestellverwaltung.rest;
 
-import static de.shop.util.TestConstants.ARTIKEL_URI;
-import static de.shop.util.TestConstants.BESTELLUNGEN_ID_KUNDE_URI;
-import static de.shop.util.TestConstants.BESTELLUNGEN_ID_PATH_PARAM;
+import static de.shop.util.TestConstants.BESTELLUNG_ID_EXISTS;
+import static de.shop.util.TestConstants.NO_ID;
 import static de.shop.util.TestConstants.BESTELLUNGEN_ID_URI;
-import static de.shop.util.TestConstants.BESTELLUNGEN_URI;
-import static de.shop.util.TestConstants.KUNDEN_ID_URI;
-import static de.shop.util.TestConstants.PASSWORD;
-import static de.shop.util.TestConstants.USERNAME;
-import static java.net.HttpURLConnection.HTTP_CREATED;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static javax.ws.rs.client.Entity.json;
+import static de.shop.util.TestConstants.BESTELLUNGEN_ID_PATH_PARAM;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_CREATED;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static de.shop.util.TestConstants.ARTIKEL_STUHL;
+import static de.shop.util.TestConstants.ARTIKEL_DOPPELBETT;
+import static de.shop.util.TestConstants.ARTIKEL_URI;
+import static de.shop.util.TestConstants.USERNAME_MITARBEITER;
+import static de.shop.util.TestConstants.PASSWORD_MITARBEITER;
+import static de.shop.util.TestConstants.BESTELLUNGEN_URI;
+import static javax.ws.rs.client.Entity.json;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.logging.Logger;
+
 
 import javax.ws.rs.core.Response;
 
@@ -26,130 +33,160 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.shop.bestellverwaltung.domain.Bestellposition;
+import de.shop.bestellverwaltung.domain.Bestellposten;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
-import de.shop.kundenverwaltung.rest.KundeResource;
 import de.shop.util.AbstractResourceTest;
 
 
-//Logging durch java.util.logging
-/**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
-
 @RunWith(Arquillian.class)
 public class BestellungResourceTest extends AbstractResourceTest {
+
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 	
-	private static final Long BESTELLUNG_ID_VORHANDEN = Long.valueOf(400);
-	private static final Long ARTIKEL_ID_VORHANDEN_1 = Long.valueOf(300);
-	private static final Long ARTIKEL_ID_VORHANDEN_2 = Long.valueOf(301);
 	
+	/* Suche nach exisitierender BestellId
+	 * 
+	 */
 	@Test
 	@InSequence(1)
-	public void findBestellungById() {
+	public void findBestellungByIdVorhanden() {
+		
 		LOGGER.finer("BEGINN");
+		//Given
+		final Long bestellungId = Long.valueOf(BESTELLUNG_ID_EXISTS);
 		
-		// Given
-		final Long bestellungId = BESTELLUNG_ID_VORHANDEN;
-		
-		// When
+		//When
 		final Response response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
-                                                  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
-                                                  .request()
-                                                  .accept(APPLICATION_JSON)
-                                                  .get();
+				                                  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
+				                                  .request()
+				                                  .accept(APPLICATION_JSON)
+				                                  .get();
 		
-		// Then
+		//Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		final Bestellung bestellung = response.readEntity(Bestellung.class);
 		
 		assertThat(bestellung.getId()).isEqualTo(bestellungId);
-		assertThat(bestellung.getBestellpositionen()).isNotEmpty();
-
+		assertThat(bestellung.getBestellposten()).isNotEmpty();
 		LOGGER.finer("ENDE");
 	}
-
+	
+	/* Suche nach einer BestellungId die NICHT existiert
+	 * 
+	 */
 	@Test
 	@InSequence(2)
-	public void findKundeByBestellungId() {
+	public void findBestellungIdNichtVorhanden() {
+		
 		LOGGER.finer("BEGINN");
+		//Given
+		final Long bestellungId = Long.valueOf(NO_ID);
 		
-		// Given
-		final Long bestellungId = BESTELLUNG_ID_VORHANDEN;
+		//When
 		
-		// When
-		Response response = getHttpsClient().target(BESTELLUNGEN_ID_KUNDE_URI)
-                                            .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
-                                            .request()
-                                            .accept(APPLICATION_JSON)
-                                            .get();
-			
-		// Then
-		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
-		assertThat(kunde).isNotNull();
+		final Response response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
+												  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
+												  .request()
+												  .accept(APPLICATION_JSON)
+												  .get();
 		
-		response = getHttpsClient().target(KUNDEN_ID_URI)
-                                   .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kunde.getId())
-                                   .request()
-                                   .accept(APPLICATION_JSON)
-                                   .get();
-		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
-		assertThat(response.getLinks()).isNotEmpty();
-		response.close();    // response.readEntity() wurde nicht aufgerufen
-
+		//Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
 		LOGGER.finer("ENDE");
+		
+		
+		
 	}
 
+
 	@Test
-	@InSequence(10)
-	public void createBestellung() throws URISyntaxException {
-		LOGGER.finer("BEGINN");
+	@InSequence(3)
+	public void createBestellungOK() throws URISyntaxException {
+		LOGGER.finer("BEGINN createBestellungOK");
 		
 		// Given
-		final Long artikelId1 = ARTIKEL_ID_VORHANDEN_1;
-		final Long artikelId2 = ARTIKEL_ID_VORHANDEN_2;
-		
-		// Neues, client-seitiges Bestellungsobjekt als JSON-Datensatz
+		final Long artikelId1 = ARTIKEL_STUHL;
+		final Long artikelId2 = ARTIKEL_DOPPELBETT;
+				
 		final Bestellung bestellung = new Bestellung();
 		
-		Bestellposition bp = new Bestellposition();
+		//Ich vermute das hier der fehler entsteht...
+		final Bestellposten bp = new Bestellposten();
 		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
-		bp.setAnzahl(new Long(1));
-		bestellung.addBestellposition(bp);
-
-		bp = new Bestellposition();
-		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
-		bp.setAnzahl(new Long(1));
+		bp.setAnzahl((short) 1);
 		bestellung.addBestellposition(bp);
 		
-		// When
-		Long id;
-		Response response = getHttpsClient(USERNAME, PASSWORD).target(BESTELLUNGEN_URI)
-                                                              .request()
-                                                              .post(json(bestellung));
-			
-		// Then
+		final Bestellposten bp1 = new Bestellposten();
+		bp1.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
+		bp1.setAnzahl((short) 1);
+		bestellung.addBestellposition(bp1);
+		
+		
+		// When		
+		 Response response = getHttpsClient(USERNAME_MITARBEITER, PASSWORD_MITARBEITER).target(BESTELLUNGEN_URI)
+						  			     .request()
+						  			     .accept(APPLICATION_JSON)
+						  			     .post(json(bestellung));
+		
+		
+		//Then
+		 Long id;
 		assertThat(response.getStatus()).isEqualTo(HTTP_CREATED);
 		final String location = response.getLocation().toString();
+		
 		response.close();
-			
+		
 		final int startPos = location.lastIndexOf('/');
 		final String idStr = location.substring(startPos + 1);
 		id = Long.valueOf(idStr);
 		assertThat(id).isPositive();
 		
-		// Gibt es die neue Bestellung?
 		response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
-                                   .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, id)
-                                   .request()
-                                   .accept(APPLICATION_JSON)
-                                   .get();
+				.resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, id)
+				.request()
+				.accept(APPLICATION_JSON)
+				.get();
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		response.close();
 		
-		LOGGER.finer("ENDE");
+		
+		LOGGER.finer("ENDE createBestellungOK");
 	}
+	
+	@Test
+	@InSequence(4)
+	public void createBestellungKundeNotLoggedIn() throws URISyntaxException {
+		LOGGER.finer("BEGINN createBestellungKundeNotLoggedIn");
+		// Given
+		final Long artikelId1 = ARTIKEL_STUHL;
+		final Long artikelId2 = ARTIKEL_DOPPELBETT;
+				
+		final Bestellung bestellung = new Bestellung();
+		
+		//Ich vermute das hier der fehler entsteht...
+		final Bestellposten bp = new Bestellposten();
+		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
+		bp.setAnzahl((short) 1);
+		bestellung.addBestellposition(bp);
+		
+		final Bestellposten bp1 = new Bestellposten();
+		bp1.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
+		bp1.setAnzahl((short) 1);
+		bestellung.addBestellposition(bp1);
+				
+		// When		
+		final Response response = getHttpsClient().target(BESTELLUNGEN_URI)
+						  			     .request()
+						  			     .accept(APPLICATION_JSON)
+						  			     .post(json(bestellung));
+		
+		//Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_UNAUTHORIZED);
+		
+		response.close();
+		
+		LOGGER.finer("ENDE createBestellungKundeNotLoggedIn");
+	}
+	
+
 }

@@ -3,6 +3,7 @@ package de.shop.util.rest;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.CONFLICT;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.OptimisticLockException;
@@ -19,6 +20,7 @@ import de.shop.util.interceptor.Log;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Provider
+@ApplicationScoped
 @Log
 public class OptimisticLockExceptionMapper implements ExceptionMapper<OptimisticLockException> {
 	private static final String MESSAGE_KEY = "persistence.concurrentUpdate";

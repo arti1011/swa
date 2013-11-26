@@ -3,6 +3,7 @@ package de.shop.util.interceptor;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -14,16 +15,17 @@ import org.jboss.logging.Logger;
  * Interceptor zum Tracing von public-Methoden der CDI-faehigen Beans und der Session Beans.
  * Sowohl der Methodenaufruf als auch der Rueckgabewert (nicht: Exception) werden mit
  * Level DEBUG protokolliert.
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Interceptor
+@Dependent
 @Log
 public class LogInterceptor implements Serializable {
 	private static final long serialVersionUID = 6225006198548883927L;
 	
 	private static final String COUNT = "Anzahl = ";
-	private static final int MAX_ELEM = 4;  // bei Collections wird ab 5 Elementen nur die Anzahl ausgegeben
-	private static final int CHAR_POS_AFTER_IS = 2; // isX...
+	private static final int MAX_ELEM = 4;  
+	private static final int CHAR_POST_AFTER_GET_SET = 3; 
+	private static final int CHAR_POST_AFTER_IS = 2; 
 
 	@AroundInvoke
 	public Object log(InvocationContext ctx) throws Exception {
@@ -39,10 +41,15 @@ public class LogInterceptor implements Serializable {
 
 		final String methodName = ctx.getMethod().getName();
 
-		if ((methodName.startsWith("is")) && Character.isUpperCase(methodName.charAt(CHAR_POS_AFTER_IS))) {
+		// getXy, setXy, isXy und toString nicht protokollieren
+		if ((methodName.startsWith("get") || methodName.startsWith("set"))
+			&& Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_GET_SET))) {
 			return ctx.proceed();
 		}
-		if (("toString".equals(methodName)) && Character.isUpperCase(methodName.charAt(CHAR_POS_AFTER_IS))) {
+		if ((methodName.startsWith("is")) && Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_IS))) {
+			return ctx.proceed();
+		}
+		if (("toString".equals(methodName)) && Character.isUpperCase(methodName.charAt(CHAR_POST_AFTER_IS))) {
 			return ctx.proceed();
 		}
 		
@@ -128,23 +135,18 @@ public class LogInterceptor implements Serializable {
 	 */
 	private static String arrayToString(Object obj) {
 		final Class<?> componentClass = obj.getClass().getComponentType();
-
 		if (!componentClass.isPrimitive()) {
-			// Array von Objekten
 			final Object[] arr = (Object[]) obj;
 			if (arr.length > MAX_ELEM) {
 				return COUNT + arr.length;
 			}
-
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
 				if (arr[i] == null) {
 					sbEnd.append("null");
 				}
-				else {
-					sbEnd.append(arr[i]);
-				}
+				else { sbEnd.append(arr[i]); }
 				sbEnd.append(", ");
 			}
 			if (anzahl > 0) {
@@ -154,15 +156,12 @@ public class LogInterceptor implements Serializable {
 			sbEnd.append(']');
 			return sbEnd.toString();
 		}
-		
 		// Array von primitiven Werten: byte, short, int, long, ..., float, double, boolean, char
-		
 		if ("short".equals(componentClass.getName())) {
 			final short[] arr = (short[]) obj;
 			if (arr.length > MAX_ELEM) {
 				return COUNT + arr.length;
 			}
-
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -176,13 +175,9 @@ public class LogInterceptor implements Serializable {
 			}
 			return sbEnd.toString();
 		}
-		
 		if ("int".equals(componentClass.getName())) {
 			final int[] arr = (int[]) obj;
-			if (arr.length > MAX_ELEM) {
-				return COUNT + arr.length;
-			}
-
+			if (arr.length > MAX_ELEM) { return COUNT + arr.length; }
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -196,13 +191,9 @@ public class LogInterceptor implements Serializable {
 			}
 			return sbEnd.toString();
 		}
-		
 		if ("long".equals(componentClass.getName())) {
 			final long[] arr = (long[]) obj;
-			if (arr.length > MAX_ELEM) {
-				return COUNT + arr.length;
-			}
-
+			if (arr.length > MAX_ELEM) { return COUNT + arr.length; }
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -216,17 +207,14 @@ public class LogInterceptor implements Serializable {
 			}
 			return sbEnd.toString();
 		}
-		
 		if ("byte".equals(componentClass.getName())) {
 			return "<byte-array>";
 		}
-
 		if ("float".equals(componentClass.getName())) {
 			final float[] arr = (float[]) obj;
 			if (arr.length > MAX_ELEM) {
 				return COUNT + arr.length;
 			}
-
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -240,13 +228,9 @@ public class LogInterceptor implements Serializable {
 			sbEnd.append(']');
 			return sbEnd.toString();
 		}
-		
 		if ("double".equals(componentClass.getName())) {
 			final double[] arr = (double[]) obj;
-			if (arr.length > MAX_ELEM) {
-				return COUNT + arr.length;
-			}
-
+			if (arr.length > MAX_ELEM) { return COUNT + arr.length; }
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -260,13 +244,9 @@ public class LogInterceptor implements Serializable {
 			sbEnd.append(']');
 			return sbEnd.toString();
 		}
-
 		if ("char".equals(componentClass.getName())) {
 			final char[] arr = (char[]) obj;
-			if (arr.length > MAX_ELEM) {
-				return COUNT + arr.length;
-			}
-
+			if (arr.length > MAX_ELEM) { return COUNT + arr.length; }
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -280,13 +260,9 @@ public class LogInterceptor implements Serializable {
 			sbEnd.append(']');
 			return sbEnd.toString();
 		}
-
 		if ("boolean".equals(componentClass.getName())) {
 			final boolean[] arr = (boolean[]) obj;
-			if (arr.length > MAX_ELEM) {
-				return COUNT + arr.length;
-			}
-
+			if (arr.length > MAX_ELEM) { return COUNT + arr.length; }
 			final StringBuilder sbEnd = new StringBuilder("[");
 			final int anzahl = arr.length;
 			for (int i = 0; i < anzahl; i++) {
@@ -300,7 +276,6 @@ public class LogInterceptor implements Serializable {
 			sbEnd.append(']');
 			return sbEnd.toString();
 		}
-
 		return "<<UNKNOWN ARRAY>>";
 	}
 }

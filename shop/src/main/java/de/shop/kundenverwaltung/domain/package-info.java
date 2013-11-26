@@ -1,3 +1,4 @@
+
 @XmlAccessorType(FIELD)
 //@XmlSchema(elementFormDefault = QUALIFIED, namespace = "urn:shop:kundenverwaltung")
 @Vetoed

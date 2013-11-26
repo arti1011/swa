@@ -3,10 +3,7 @@ package de.shop.kundenverwaltung.service;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 
 
-/**
- * Exception, die ausgel&ouml;st wird, wenn ein Kunde gel&ouml;scht werden soll, aber mindestens eine Bestellung hat
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
+
 public class KundeDeleteBestellungException extends AbstractKundeServiceException {
 	private static final long serialVersionUID = 2237194289969083093L;
 	
