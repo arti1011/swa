@@ -11,9 +11,7 @@ import javax.persistence.Inheritance;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-/**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
+
 @Entity
 @Inheritance
 @DiscriminatorValue(FIRMENKUNDE)

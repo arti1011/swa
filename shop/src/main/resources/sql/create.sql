@@ -10,8 +10,11 @@ DROP TABLE hobby;
 DROP SEQUENCE hibernate_sequence;
 
 CREATE TABLE hobby(id VARCHAR2(2) NOT NULL PRIMARY KEY, txt VARCHAR2(16) NOT NULL UNIQUE) CACHE;
+<<<<<<< HEAD
 
 CREATE INDEX kunde_hobby__kunde_index ON kunde_hobby(kunde_fk);
+=======
+>>>>>>> branch 'master' of https://github.com/arti1011/swa.git
 CREATE SEQUENCE hibernate_sequence START WITH 5000;
 
 

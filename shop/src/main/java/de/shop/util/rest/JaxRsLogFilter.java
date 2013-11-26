@@ -1,9 +1,11 @@
-package de.shop.util;
+
+package de.shop.util.rest;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.security.Principal;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -17,6 +19,7 @@ import org.jboss.logging.Logger;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Provider
+@ApplicationScoped
 public class JaxRsLogFilter implements ContainerRequestFilter, ContainerResponseFilter {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
@@ -45,4 +48,5 @@ public class JaxRsLogFilter implements ContainerRequestFilter, ContainerResponse
 		LOGGER.debugf("Status Info: %d %s", responseCtx.getStatus(), responseCtx.getStatusInfo());
 		LOGGER.debugf("Location: %s", responseCtx.getLocation());		
 	}
+	
 }

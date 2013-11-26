@@ -3,6 +3,8 @@ package de.shop.util.rest;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.CONFLICT;
 
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -18,6 +20,7 @@ import de.shop.util.persistence.ConcurrentDeletedException;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 @Provider
+@ApplicationScoped
 @Log
 public class ConcurrentDeletedExceptionMapper implements ExceptionMapper<ConcurrentDeletedException> {
 	@Context
