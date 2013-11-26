@@ -70,16 +70,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 	
 	private static final Long KUNDE_ID_VORHANDEN_MIT_BESTELLUNGEN = Long.valueOf(102);
-<<<<<<< HEAD
-	private static final Long KUNDE_ID_NICHT_VORHANDEN = Long.valueOf(1000);
-	private static final Long KUNDE_ID_UPDATE = Long.valueOf(120);
-	private static final Long KUNDE_ID_DELETE = Long.valueOf(122);
-	private static final Long KUNDE_ID_DELETE_MIT_BESTELLUNGEN = Long.valueOf(101);
-	private static final Long KUNDE_ID_DELETE_FORBIDDEN = Long.valueOf(101);
-	private static final String NACHNAME_VORHANDEN = "Alpha";
-	private static final String NACHNAME_NICHT_VORHANDEN = "Falschername";
-	private static final String NACHNAME_INVALID = "Test9";
-=======
 	
 	private static final Long KUNDE_ID_VORHANDEN = Long.valueOf(101);
 	private static final Long KUNDE_ID_NICHT_VORHANDEN = Long.valueOf(100);
@@ -92,7 +82,6 @@ public class KundeResourceTest extends AbstractResourceTest {
 	private static final String NACHNAME_VORHANDEN = "Delta";
 	private static final String NACHNAME_NICHT_VORHANDEN = "Noname";
 	private static final String NACHNAME_INVALID = "lala7";
->>>>>>> branch 'master' of https://github.com/arti1011/swa.git
 	private static final String NEUER_NACHNAME = "Nachnameneu";
 	private static final String NEUER_NACHNAME_INVALID = "!";
 	private static final String NEUER_VORNAME = "Vornameneu";
