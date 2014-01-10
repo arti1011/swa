@@ -10,8 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-
+/**
+ * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
+ */
 @Entity
 @Inheritance
 @DiscriminatorValue(FIRMENKUNDE)
@@ -23,6 +24,7 @@ public class Firmenkunde extends AbstractKunde {
 	public Firmenkunde() {
 		super();
 	}
+
 	public Firmenkunde(String nachname, String vorname, String email, Date seit) {
 		super(nachname, vorname, email, seit);
 	}

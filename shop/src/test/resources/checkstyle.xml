@@ -38,13 +38,16 @@
 		<module name="UnusedImports"/>
 
 		<!-- http://checkstyle.sourceforge.net/config_sizes.html -->
-		<module name="AnonInnerLength"/>
+		<module name="AnonInnerLength">
+			<property name="max" value="60"/>
+		</module>
+
 		<module name="LineLength">
 			<property name="max" value="120"/>
 			<property name="tabWidth" value="4"/>
 		</module>
 		<module name="MethodCount">
-			<property name="maxPublic" value="30"/>
+			<property name="maxPublic" value="40"/>
 			<property name="maxProtected" value="10"/>
 			<property name="maxPackage" value="10"/>
 			<property name="maxPrivate" value="10"/>
@@ -127,7 +130,6 @@
 		<module name="NestedIfDepth">
 			<property name="max" value="2"/>
 		</module>
-		<module name="NoFinalizer"/>
 		<module name="OneStatementPerLine"/>
 		<module name="PackageDeclaration"/>
 		<module name="RedundantThrows"/>

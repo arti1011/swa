@@ -1,4 +1,3 @@
-
 @XmlAccessorType(FIELD)
 //@XmlSchema(elementFormDefault = QUALIFIED, namespace = "urn:shop:kundenverwaltung")
 @Vetoed
@@ -9,6 +8,7 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 import javax.enterprise.inject.Vetoed;
 import javax.xml.bind.annotation.XmlAccessorType;
+
 //import javax.xml.bind.annotation.XmlSchema;
 
 /**
