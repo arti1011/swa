@@ -4,7 +4,6 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import java.lang.invoke.MethodHandles;
 
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

@@ -73,9 +73,7 @@ public class KundeResource {
 	private static final String VERSION = "1.0";
 	
 	// public fuer Testklassen
-
 	public static final String KUNDEN_ID_PATH_PARAM = "kundenId";
-
 	public static final String KUNDEN_NACHNAME_QUERY_PARAM = "nachname";
 	public static final String KUNDEN_PLZ_QUERY_PARAM = "plz";
 	public static final String KUNDEN_EMAIL_QUERY_PARAM = "email";
@@ -124,8 +122,7 @@ public class KundeResource {
 	@GET
 	@Path("{" + KUNDEN_ID_PATH_PARAM + ":[1-9][0-9]*}")
 	public Response findKundeById(@PathParam(KUNDEN_ID_PATH_PARAM) Long id) {
-		
-		final AbstractKunde kunde = ks.findKundeById(id, FetchType.MIT_BESTELLUNGEN);
+		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE);
 		if (kunde == null) {
 			throw new NotFoundException(NOT_FOUND_ID, id);
 		}
