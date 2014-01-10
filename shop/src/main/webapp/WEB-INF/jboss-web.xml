@@ -14,5 +14,4 @@
 		   version="8.0">
 	<security-domain>shop</security-domain>
 	<disable-audit>false</disable-audit>
-	
 </jboss-web>

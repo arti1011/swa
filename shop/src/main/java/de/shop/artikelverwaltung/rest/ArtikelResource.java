@@ -161,32 +161,24 @@ public class ArtikelResource {
 	
 	@PUT
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
-	@Produces
+	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Transactional
 	public Response updateArtikel(Artikel artikel) {
-		// Vorhandenen Kunden ermitteln
+		// Vorhandenen Artikel ermitteln
 		final Artikel origArtikel = as.findArtikelById(artikel.getId());
 		if (origArtikel == null) {
-			final String msg = "Kein Artikel gefunden mit der ID " + artikel.getId();
-			throw new NotFoundException(msg);
+			throw new NotFoundException(NOT_FOUND_ID, artikel.getId());
 		}
 		LOGGER.tracef("Artikel vorher: %s", origArtikel);
 	
 		// Daten des vorhandenen Kunden ueberschreiben
 		origArtikel.setValues(artikel);
-		LOGGER.tracef("Kunde nachher: %s", origArtikel);
+		LOGGER.tracef("Artikel nachher: %s", origArtikel);
 		
 		// Update durchfuehren
 		artikel = as.updateArtikel(origArtikel);
-		if (artikel == null) {
-			
-			final String msg = "Kein Artikel gefunden mit der ID " + origArtikel.getId();
-			throw new NotFoundException(msg);
-		}
 		
-		return Response.ok(artikel)
-			       .links(getTransitionalLinks(artikel, uriInfo))
-			       .build();
+		return Response.ok(artikel).links(getTransitionalLinks(artikel, uriInfo)).build();
 	
 	}
 
