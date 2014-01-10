@@ -110,7 +110,6 @@ public class BestellungResourceTest extends AbstractResourceTest {
 				
 		final Bestellung bestellung = new Bestellung();
 		
-		//Ich vermute das hier der fehler entsteht...
 		final Bestellposten bp = new Bestellposten();
 		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
 		bp.setAnzahl((short) 1);
@@ -163,7 +162,6 @@ public class BestellungResourceTest extends AbstractResourceTest {
 				
 		final Bestellung bestellung = new Bestellung();
 		
-		//Ich vermute das hier der fehler entsteht...
 		final Bestellposten bp = new Bestellposten();
 		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
 		bp.setAnzahl((short) 1);
