@@ -123,7 +123,8 @@ import de.shop.util.persistence.File;
 
 })
 @NamedEntityGraphs({
-		@NamedEntityGraph(name = AbstractKunde.GRAPH_BESTELLUNGEN, attributeNodes = @NamedAttributeNode("bestellungen")),
+		@NamedEntityGraph(name = AbstractKunde.GRAPH_BESTELLUNGEN, attributeNodes = 
+				@NamedAttributeNode("bestellungen")),
 		@NamedEntityGraph(name = AbstractKunde.GRAPH_WARTUNGSVERTRAEGE,
 				attributeNodes = @NamedAttributeNode("wartungsvertraege")) })
 @ScriptAssert(lang = "javascript", script = "_this.password != null && !_this.password.equals(\"\")"
