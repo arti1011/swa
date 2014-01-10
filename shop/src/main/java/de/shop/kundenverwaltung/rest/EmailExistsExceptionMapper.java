@@ -14,7 +14,6 @@ import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.util.interceptor.Log;
 import de.shop.util.rest.Messages;
 
-
 /**
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
@@ -23,16 +22,13 @@ import de.shop.util.rest.Messages;
 public class EmailExistsExceptionMapper implements ExceptionMapper<EmailExistsException> {
 	@Context
 	private HttpHeaders headers;
-	
+
 	@Inject
 	private Messages messages;
-	
+
 	@Override
 	public Response toResponse(EmailExistsException e) {
 		final String msg = messages.getMessage(headers, e.getMessageKey(), e.getEmail());
-		return Response.status(BAD_REQUEST)
-		               .type(TEXT_PLAIN)
-		               .entity(msg)
-		               .build();
+		return Response.status(BAD_REQUEST).type(TEXT_PLAIN).entity(msg).build();
 	}
 }

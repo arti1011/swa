@@ -4,8 +4,6 @@ package de.shop.util;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 public final class Constants {
-	
-	// REST-PATH
 	public static final String REST_PATH = "/rest";
 
 	// Header-Links
@@ -16,26 +14,25 @@ public final class Constants {
 	public static final String REMOVE_LINK = "remove";
 	public static final String FIRST_LINK = "first";
 	public static final String LAST_LINK = "last";
-	
+
 	// JPA
 	public static final Long KEINE_ID = null;
 	public static final long MIN_ID = 1L;
 	public static final int ERSTE_VERSION = 0;
 	public static final int MAX_AUTOCOMPLETE = 10;
-	
+
 	// JAAS
 	public static final String SECURITY_DOMAIN = "shop";
-	
+
 	public static final String HASH_ALGORITHM = "SHA-256";
 	public static final String HASH_ENCODING = "base64";
 	public static final String HASH_CHARSET = "UTF-8";
-	
+
 	// JSF
 	public static final String JSF_INDEX = "/index";
 	public static final String JSF_DEFAULT_ERROR = "/error/defaultError";
 	public static final String JSF_REDIRECT_SUFFIX = "?faces-redirect=true";
-	
-	
+
 	private Constants() {
 	}
 }

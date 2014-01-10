@@ -14,7 +14,6 @@ import de.shop.kundenverwaltung.service.KundeDeleteBestellungException;
 import de.shop.util.interceptor.Log;
 import de.shop.util.rest.Messages;
 
-
 /**
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
@@ -23,16 +22,13 @@ import de.shop.util.rest.Messages;
 public class KundeDeleteBestellungExceptionMapper implements ExceptionMapper<KundeDeleteBestellungException> {
 	@Context
 	private HttpHeaders headers;
-	
+
 	@Inject
 	private Messages messages;
-	
+
 	@Override
 	public Response toResponse(KundeDeleteBestellungException e) {
 		final String msg = messages.getMessage(headers, e.getMessageKey(), e.getKundeId(), e.getAnzahlBestellungen());
-		return Response.status(BAD_REQUEST)
-		               .type(TEXT_PLAIN)
-		               .entity(msg)
-		               .build();
+		return Response.status(BAD_REQUEST).type(TEXT_PLAIN).entity(msg).build();
 	}
 }

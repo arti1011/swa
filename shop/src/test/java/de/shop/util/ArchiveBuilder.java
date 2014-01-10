@@ -86,5 +86,3 @@ public enum ArchiveBuilder {
 		return archiveMitTestklassen;
 	}
 }
-	
-
