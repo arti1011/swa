@@ -235,8 +235,10 @@ public class AuthService implements Serializable {
 	public static void main(String[] args) throws IOException {
 		for (;;) {
 			System.out.print("Password (Abbruch durch <Return>): ");
+
 			final BufferedReader reader = new BufferedReader(
 					new InputStreamReader(System.in, Charset.defaultCharset()));
+
 			final String password = reader.readLine();
 			if (Strings.isNullOrEmpty(password)) {
 				break;
