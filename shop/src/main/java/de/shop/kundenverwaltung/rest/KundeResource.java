@@ -115,8 +115,8 @@ public class KundeResource {
 	 * @return Objekt mit Kundendaten, falls die ID vorhanden ist
 	 */
 	@GET
-	@Path("{" + KUNDEN_ID_PATH_PARAM + ":[1-9][0-9]*}")
-	public Response findKundeById(@PathParam(KUNDEN_ID_PATH_PARAM) Long id) {
+	@Path("{id:[1-9][0-9]*}")
+	public Response findKundeById(@PathParam("id") Long id) {
 		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE);
 		if (kunde == null) {
 			throw new NotFoundException(NOT_FOUND_ID, id);
@@ -424,4 +424,6 @@ public class KundeResource {
 
 		return file.getBytes();
 	}
+
+
 }

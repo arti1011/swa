@@ -54,7 +54,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.validation.groups.Default;
@@ -141,7 +140,7 @@ public abstract class AbstractKunde implements Serializable, Cloneable {
 
 	private static final String NAME_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF]+";
 	private static final String PREFIX_ADEL = "(o'|von|von der|von und zu|van)?";
-	public static final String NACHNAME_PATTERN = PREFIX_ADEL + NAME_PATTERN + "(-" + NAME_PATTERN + ")?";
+	public static final String NACHNAME_PATTERN = PREFIX_ADEL + NAME_PATTERN;
 	private static final int NACHNAME_LENGTH_MIN = 2; // kann an der GUI abgefragt werden
 	private static final int NACHNAME_LENGTH_MAX = 32;
 	private static final int VORNAME_LENGTH_MAX = 32;
@@ -217,7 +216,6 @@ public abstract class AbstractKunde implements Serializable, Cloneable {
 
 	@Basic(optional = false)
 	@Temporal(DATE)
-	@Past(message = "{kunde.seit.past}")
 	private Date seit;
 
 	@Column(length = EMAIL_LENGTH_MAX, unique = true, nullable = false)
