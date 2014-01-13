@@ -130,7 +130,7 @@ public class ArtikelService implements Serializable {
 		em.detach(artikel);
 
 		// Gibt es ein anderes Objekt mit gleicher Bezeichnung?
-		List<Artikel> tmp = findArtikelByBezeichnung(artikel.getBezeichnung());
+		final List<Artikel> tmp = findArtikelByBezeichnung(artikel.getBezeichnung());
 		for (Artikel a : tmp) {
 			em.detach(a);
 			if ((a.getBezeichnung().equals(artikel.getBezeichnung()))

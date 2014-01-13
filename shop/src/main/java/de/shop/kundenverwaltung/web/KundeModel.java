@@ -423,6 +423,39 @@ public class KundeModel implements Serializable {
 
 		return JSF_VIEW_KUNDE + JSF_REDIRECT_SUFFIX;
 	}
+	
+	@TransactionAttribute
+	@Log
+	public String registrieren() {
+		if (!captcha.getValue().equals(captchaInput)) {
+			final String outcome = createPrivatkundeErrorMsg(null);
+			return outcome;
+		}
+
+		// Liste von Strings als Set von Enums konvertieren
+		final Set<HobbyType> hobbiesPrivatkunde = new HashSet<>();
+		for (String s : hobbies) {
+			hobbiesPrivatkunde.add(HobbyType.valueOf(s));
+		}
+		neuerPrivatkunde.setHobbies(hobbiesPrivatkunde);
+		try {
+			neuerPrivatkunde = ks.createKunde(neuerPrivatkunde);
+		}
+		catch (EmailExistsException e) {
+			return createPrivatkundeErrorMsg(e);
+		}
+
+		// Push-Event fuer Webbrowser
+		neuerKundeEvent.fire(String.valueOf(neuerPrivatkunde.getId()));
+
+		// Aufbereitung fuer viewKunde.xhtml
+		kundeId = neuerPrivatkunde.getId();
+		kunde = neuerPrivatkunde;
+		neuerPrivatkunde = null; // zuruecksetzen
+		hobbies = null;
+
+		return JSF_VIEW_MEINEKUNDENDATEN + JSF_REDIRECT_SUFFIX;
+	}
 
 	private String createPrivatkundeErrorMsg(AbstractShopException e) {
 		if (e == null) {

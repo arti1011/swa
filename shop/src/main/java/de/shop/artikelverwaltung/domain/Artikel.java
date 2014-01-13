@@ -57,7 +57,8 @@ public class Artikel implements Serializable {
 
 	public static final int BEZEICHNUNG_LENGTH_MIN = 2;
 	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
-	public static final String BEZEICHNUNG_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF0-9]";
+	public static final String BEZEICHNUNG_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF0-9]+"
+			+ "(-[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF0-9]+)?";
 
 	private static final String PREFIX = "Artikel.";
 	public static final String FIND_VERFUEGBARE_ARTIKEL = PREFIX + "findausgesonderteArtikel";

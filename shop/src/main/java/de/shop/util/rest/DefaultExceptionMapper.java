@@ -35,7 +35,8 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	public Response toResponse(Throwable exception) {
 		final Throwable badRequestException = getBadRequestException(exception);
 		if (badRequestException instanceof ConstraintViolationException) {
-			final ViolationReport violationReport = toViolationReport((ConstraintViolationException) badRequestException);
+			final ViolationReport violationReport = toViolationReport(
+					(ConstraintViolationException) badRequestException);
 			return Response.status(BAD_REQUEST).entity(violationReport).build();
 		}
 		if (badRequestException != null) {

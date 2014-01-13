@@ -36,7 +36,7 @@
 		<r:toolbarGroup id="rightGroup" location="right">
 			<h:form id="registrierenFormHeader" rendered="#{not authModel.loggedIn}">
 				<h:link id="registrierenButton" value="#{msg['header.registrieren']}" 
-					outcome="/kundenverwaltung/createPrivatkunde" />
+					outcome="/kundenverwaltung/registrieren" />
 			</h:form>
 			<h:form id="loginFormHeader" rendered="#{not authModel.loggedIn}">
 
