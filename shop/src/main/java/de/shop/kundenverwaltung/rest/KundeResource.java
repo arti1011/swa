@@ -5,7 +5,6 @@ import static de.shop.util.Constants.FIRST_LINK;
 import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.LAST_LINK;
 import static de.shop.util.Constants.LIST_LINK;
-import static de.shop.util.Constants.REMOVE_LINK;
 import static de.shop.util.Constants.SELF_LINK;
 import static de.shop.util.Constants.UPDATE_LINK;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -148,10 +147,7 @@ public class KundeResource {
 
 		final Link update = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo)).rel(UPDATE_LINK).build();
 
-		final Link remove = Link.fromUri(uriHelper.getUri(KundeResource.class, "deleteKunde", kunde.getId(), uriInfo))
-				.rel(REMOVE_LINK).build();
-
-		return new Link[] {self, list, add, update, remove };
+		return new Link[] {self, list, add, update };
 	}
 
 	public URI getUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
